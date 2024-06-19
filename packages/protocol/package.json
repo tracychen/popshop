@@ -1,0 +1,12 @@
+{
+  "name": "@starter/protocol",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules out ../../deployments/31337",
+    "dev": "rm -rf ../../deployments/31337 && anvil",
+    "build": "forge build",
+    "test": "forge test -v",
+    "lint": "forge fmt --check"
+  }
+}
