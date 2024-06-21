@@ -7,20 +7,16 @@ const sidebarNavItems = [
   },
   {
     title: "Display",
-    href: "/settings",
+    href: "/settings#display",
   },
 ];
 
-interface SettingsLayoutProps {
-  children: React.ReactNode;
-}
-
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="space-y-6 p-10 pb-16">
         <div className="space-y-1">
-          <h2 className="text-xl tracking-tight selection:font-semibold">
+          <h2 className="pt-24 text-xl tracking-tight selection:font-semibold">
             Settings
           </h2>
           <p className="text-muted-foreground">Manage your settings.</p>

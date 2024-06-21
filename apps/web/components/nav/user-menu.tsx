@@ -1,6 +1,10 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { truncateString } from "@/lib/utils";
+
+import { useLogout, User } from "@privy-io/react-auth";
+import { useRouter } from "next/navigation";
+import { Icons } from "../icons";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -11,37 +15,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { truncateString } from "@/lib/utils";
-import { disconnect } from "@wagmi/core";
-import { useRouter } from "next/navigation";
-import { Icons } from "../icons";
-import { User } from "next-auth";
 
 export function UserMenu({ user }: { user: User }) {
   const router = useRouter();
 
-  const username = truncateString(user.evmAddress);
+  const { logout } = useLogout();
+
+  const username = truncateString(user.wallet?.address);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="flex items-center gap-x-2 hover:cursor-pointer">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.imageUrl} alt={username} />
+            <AvatarImage src={user.farcaster?.pfp} alt={username} />
             <AvatarFallback>
               <Icons.user className="h-5 w-5" />
             </AvatarFallback>
           </Avatar>
-          <Icons.caretdown className="hidden h-4 w-4 sm:block" />
+          {/* <Icons.caretdown className="hidden h-4 w-4 sm:block" /> */}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {username || truncateString(user.evmAddress)}
-            </p>
+            <p className="text-sm font-medium leading-none">{username}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {truncateString(user.evmAddress)}
+              {truncateString(user.wallet?.address)}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -60,10 +59,7 @@ export function UserMenu({ user }: { user: User }) {
           className="cursor-pointer"
           onSelect={async (event) => {
             event.preventDefault();
-            await disconnect();
-            await signOut({
-              callbackUrl: "/",
-            });
+            logout();
           }}
         >
           Sign out

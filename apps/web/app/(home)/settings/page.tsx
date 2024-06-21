@@ -1,20 +1,9 @@
-import { SettingsForm } from "@/components/settings/settings-form";
-import { getCurrentUser } from "@/lib/session";
-import { getUserByAddress } from "@/lib/user";
-import { redirect } from "next/navigation";
+import SettingsPage from "@/components/settings/settings-page";
 
 export const metadata = {
-  title: "Settings | popshop",
+  title: "Settings | popshop*",
 };
 
-export default async function SettingsPage() {
-  let currentUser = await getCurrentUser();
-
-  if (!currentUser) {
-    redirect("/login");
-  }
-
-  const user = await getUserByAddress(currentUser.evmAddress);
-
-  return <SettingsForm user={user} />;
+export default async function Page() {
+  return <SettingsPage />;
 }

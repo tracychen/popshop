@@ -1,12 +1,8 @@
-import { getCurrentUser } from "@/lib/session";
-
 export const metadata = {
-  title: "Home | popshop",
+  title: "Home | popshop*",
 };
 
-export default async function HomePage() {
-  const currentUser = await getCurrentUser();
-
+export default async function Page() {
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-[url('/images/landing-2.webp')] bg-cover bg-center">
       {/* Welcome to the home page, current user: {currentUser?.evmAddress} */}

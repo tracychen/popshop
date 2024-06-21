@@ -2,9 +2,8 @@
 import "./globals.css";
 
 import { Toaster } from "@/components/ui/toaster";
-import { authOptions } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import WalletProvider from "@/providers/WalletProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 import {
   Inter,
   Open_Sans,
@@ -13,7 +12,6 @@ import {
   Sniglet,
 } from "@next/font/google";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
   title: "popshop",
@@ -57,8 +55,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html
       lang="en"
@@ -68,10 +64,10 @@ export default async function RootLayout({
         suppressHydrationWarning={true}
         className={cn("min-h-screen bg-background")}
       >
-        <WalletProvider session={session}>
+        <AuthProvider>
           {children}
           <Toaster />
-        </WalletProvider>
+        </AuthProvider>
       </body>
     </html>
   );

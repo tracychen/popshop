@@ -1,18 +1,18 @@
 "use client";
 
-import User from "@/models/User.model";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { toast } from "../ui/use-toast";
-import { cn } from "@/lib/utils";
-import { Input } from "../ui/input";
-import { buttonVariants } from "../ui/button";
 import { Icons } from "../icons";
-import { Label } from "../ui/label";
+import { buttonVariants } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { toast } from "../ui/use-toast";
 
 interface SettingsFormProps extends React.HTMLAttributes<HTMLFormElement> {
   user: Partial<User>;
@@ -36,7 +36,7 @@ export function SettingsForm({ user, className, ...props }: SettingsFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      imageUrl: user?.imageUrl,
+      // imageUrl: user?.imageUrl,
       deleteAccount: false,
     },
   });
@@ -85,10 +85,10 @@ export function SettingsForm({ user, className, ...props }: SettingsFormProps) {
         <Label htmlFor="imageUrl">Profile Picture</Label>
         <Input id="imageUrl" {...register("imageUrl")} type="file" />
         {errors.imageUrl && (
-          <p className="px-1 text-xs text-red-600">{errors.imageUrl.message}</p>
+          <p className="px-1 text-xs text-destructive">{errors.imageUrl.message}</p>
         )}
       </div>
-      <div className="items-top flex space-x-2">
+      <div className="items-center flex space-x-2">
         <Checkbox
           id="deleteAccount"
           {...register("deleteAccount")}
@@ -105,7 +105,7 @@ export function SettingsForm({ user, className, ...props }: SettingsFormProps) {
             Delete Account
           </label>
           {watch("deleteAccount") && (
-            <p className="text-sm text-red-600">
+            <p className="text-sm text-destructive">
               This action cannot be undone.
             </p>
           )}
