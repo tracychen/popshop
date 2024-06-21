@@ -1,5 +1,5 @@
 {
-  "name": "@starter/database",
+  "name": "@popshop/database",
   "version": "1.0.0",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -28,8 +28,8 @@
     "@prisma/client": "^4.13.0"
   },
   "devDependencies": {
-    "@starter/config": "*",
-    "@starter/tsconfig": "*",
+    "@popshop/config": "*",
+    "@popshop/tsconfig": "*",
     "eslint": "^8.12.0",
     "prisma": "^4.13.0",
     "rimraf": "^3.0.2",

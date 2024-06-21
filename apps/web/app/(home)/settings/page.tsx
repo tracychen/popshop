@@ -4,7 +4,7 @@ import { getUserByAddress } from "@/lib/user";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-  title: "Settings | starter",
+  title: "Settings | popshop",
 };
 
 export default async function SettingsPage() {

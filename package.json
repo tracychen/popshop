@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "popshop",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -14,7 +15,7 @@
   "devDependencies": {
     "prettier": "^2.5.1",
     "tsx": "^3.7.1",
-    "turbo": "latest"
+    "turbo": "^2.0.4"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.22"
 }

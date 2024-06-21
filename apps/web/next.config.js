@@ -7,6 +7,6 @@ module.exports = {
   },
   reactStrictMode: false,
   images: {
-    domains: ["starter.s3.amazonaws.com"],
+    domains: ["popshop.s3.amazonaws.com"],
   },
 };

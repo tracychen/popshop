@@ -1,5 +1,5 @@
 {
-  "extends": "@starter/tsconfig/nextjs.json",
+  "extends": "@popshop/tsconfig/nextjs.json",
   "compilerOptions": {
     "jsx": "preserve",
     "plugins": [

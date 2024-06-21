@@ -1,54 +1,35 @@
 "use client";
 
 import {
-  connectorsForWallets,
+  getDefaultConfig,
   lightTheme,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import {
-  coreWallet,
-  metaMaskWallet,
-  walletConnectWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import "@rainbow-me/rainbowkit/styles.css";
-import { type ReactNode } from "react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { avalanche, avalancheFuji } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
-import {
-  RainbowKitSiweNextAuthProvider,
   GetSiweMessageOptions,
+  RainbowKitSiweNextAuthProvider,
 } from "@rainbow-me/rainbowkit-siwe-next-auth";
-import { SessionProvider } from "next-auth/react";
+import "@rainbow-me/rainbowkit/styles.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import { type ReactNode } from "react";
+import { http, WagmiProvider } from "wagmi";
+import { base } from "wagmi/chains";
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: "Sign in to starter",
+  statement: "Sign in to popshop",
 });
-
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [avalanche, avalancheFuji],
-  [publicProvider()],
-);
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID;
 
-const connectors = connectorsForWallets([
-  {
-    groupName: "Recommended",
-    wallets: [
-      coreWallet({ projectId, chains }),
-      metaMaskWallet({ projectId, chains }),
-      walletConnectWallet({ projectId, chains }),
-    ],
+const config = getDefaultConfig({
+  appName: "RainbowKit demo",
+  projectId: projectId,
+  chains: [base as any],
+  transports: {
+    [base.id]: http(),
   },
-]);
-
-const config = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-  webSocketPublicClient,
 });
 
 export interface WalletProviderProps {
@@ -56,27 +37,30 @@ export interface WalletProviderProps {
   session?: Session | null;
 }
 
+const queryClient = new QueryClient();
+
 const WalletProvider = (props: WalletProviderProps) => {
   return (
     <>
-      <WagmiConfig config={config}>
-        <SessionProvider refetchInterval={0} session={props.session}>
-          <RainbowKitSiweNextAuthProvider
-            getSiweMessageOptions={getSiweMessageOptions}
-          >
-            <RainbowKitProvider
-              chains={chains}
-              modalSize="compact"
-              theme={lightTheme({
-                borderRadius: "medium",
-                fontStack: "system",
-              })}
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <SessionProvider refetchInterval={0} session={props.session}>
+            <RainbowKitSiweNextAuthProvider
+              getSiweMessageOptions={getSiweMessageOptions}
             >
-              {props.children}
-            </RainbowKitProvider>
-          </RainbowKitSiweNextAuthProvider>
-        </SessionProvider>
-      </WagmiConfig>
+              <RainbowKitProvider
+                modalSize="compact"
+                theme={lightTheme({
+                  borderRadius: "medium",
+                  fontStack: "system",
+                })}
+              >
+                {props.children}
+              </RainbowKitProvider>
+            </RainbowKitSiweNextAuthProvider>
+          </SessionProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </>
   );
 };

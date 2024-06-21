@@ -1,7 +1,7 @@
+import { prisma } from "@popshop/database";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import { authOptions } from "./auth";
-import { prisma } from "@starter/database";
 
 const apiKeyHeader = "x-api-key";
 

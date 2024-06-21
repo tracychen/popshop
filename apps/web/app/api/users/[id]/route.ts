@@ -1,7 +1,7 @@
-import { NextRequest } from "next/server";
-import { prisma } from "@starter/database";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@popshop/database";
+import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
 
 export async function GET(
   _: NextRequest,

@@ -1,8 +1,8 @@
 "use client";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 export default function WalletConnectButton() {
   const router = useRouter();
@@ -31,11 +31,7 @@ export default function WalletConnectButton() {
             <>
               {!connected ? (
                 <>
-                  <Button
-                    onClick={openConnectModal}
-                    variant="default"
-                    size="full"
-                  >
+                  <Button onClick={openConnectModal} variant="secondary">
                     Connect Wallet
                   </Button>
                 </>

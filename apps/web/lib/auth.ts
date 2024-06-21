@@ -1,5 +1,4 @@
-import { prisma } from "@starter/database";
-import { Wallet } from "ethers";
+import { prisma } from "@popshop/database";
 import { NextAuthOptions, SessionStrategy } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
@@ -48,12 +47,9 @@ export const authOptions: NextAuthOptions = {
           });
           if (!user) {
             // create backend evm wallet
-            const newWallet = Wallet.createRandom();
             const newUser = await prisma.user.create({
               data: {
                 evmAddress: siwe.address.toLowerCase(),
-                privateKey: newWallet.privateKey,
-                custodialAddress: newWallet.address,
               },
             });
 
