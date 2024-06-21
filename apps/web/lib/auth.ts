@@ -67,7 +67,6 @@ export const authOptions: NextAuthOptions = {
     async session({ token, session }) {
       session.user.id = token.sub;
       session.user.evmAddress = token.evmAddress;
-      session.user.custodialAddress = token.custodialAddress;
       session.user.image = token.picture;
       return session;
     },
@@ -75,7 +74,6 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.evmAddress = user.evmAddress;
         token.picture = user.imageUrl;
-        token.custodialAddress = user.custodialAddress;
       }
       return token;
     },

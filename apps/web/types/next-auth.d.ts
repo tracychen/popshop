@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
-import { DefaultJWT } from "next-auth/jwt";
+import { DefaultUser } from "next-auth";
+import "next-auth/jwt";
 
 declare module "next-auth" {
   /**
@@ -9,7 +9,6 @@ declare module "next-auth" {
    */
   interface User extends DefaultUser {
     evmAddress: string;
-    custodialAddress: string;
     imageUrl: string;
   }
 
@@ -26,6 +25,5 @@ declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
     evmAddress: string;
-    custodialAddress: string;
   }
 }
