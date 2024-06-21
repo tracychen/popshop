@@ -13,7 +13,6 @@
     "@next/font": "^14.0.4",
     "@phosphor-icons/react": "^2.1.6",
     "@popshop/database": "*",
-    "@popshop/protocol": "*",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-context-menu": "^2.1.5",
