@@ -3,7 +3,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { redirect } from "next/navigation";
 import { SettingsForm } from "./settings-form";
 
-export default async function SettingsPage() {
+export default function SettingsPage() {
     const { ready, user } = usePrivy();
   
     if (ready && !user) {

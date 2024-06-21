@@ -16,6 +16,7 @@ export const LogInButton = ({ ...props }) => {
   return (
     <Button
       className={props?.className}
+      variant={props?.variant || "default"}
       disabled={!ready || authenticated}
       onClick={login}
     >

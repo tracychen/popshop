@@ -4,12 +4,13 @@ export const metadata = {
 
 export default async function Page() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center bg-[url('/images/landing-2.webp')] bg-cover bg-center">
-      {/* Welcome to the home page, current user: {currentUser?.evmAddress} */}
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-[url('/images/landing-2.webp')] bg-cover bg-center">
       <h1 className="font-sniglet text-4xl text-primary-foreground sm:text-6xl md:text-9xl">
         popshop*
       </h1>
-      {/* px-4 py-2 sm:px-10 sm:py-8 */}
+      <p className="hidden pl-8 text-muted md:flex md:text-sm">
+        incentivized social commerce
+      </p>
     </div>
   );
 }

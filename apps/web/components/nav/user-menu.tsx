@@ -1,6 +1,6 @@
 "use client";
 
-import { truncateString } from "@/lib/utils";
+import { cn, truncateString } from "@/lib/utils";
 
 import { useLogout, User } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
@@ -16,7 +16,13 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 
-export function UserMenu({ user }: { user: User }) {
+export function UserMenu({
+  user,
+  isHomepage,
+}: {
+  user: User;
+  isHomepage: boolean;
+}) {
   const router = useRouter();
 
   const { logout } = useLogout();
@@ -28,8 +34,14 @@ export function UserMenu({ user }: { user: User }) {
         <div className="flex items-center gap-x-2 hover:cursor-pointer">
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.farcaster?.pfp} alt={username} />
-            <AvatarFallback>
-              <Icons.user className="h-5 w-5" />
+            <AvatarFallback className="bg-transparent">
+              <Icons.rabbit
+                className={cn(
+                  "h-8 w-8",
+                  isHomepage ? "text-primary-foreground" : "text-primary",
+                )}
+                weight="fill"
+              />
             </AvatarFallback>
           </Avatar>
           {/* <Icons.caretdown className="hidden h-4 w-4 sm:block" /> */}
