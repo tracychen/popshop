@@ -1,5 +1,12 @@
 {
   "solidity.monoRepoSupport": true,
+  "solidity.compileUsingRemoteVersion": "v0.8.20",
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "solidity.formatter": "forge",
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.formatOnSave": true,
@@ -8,5 +15,6 @@
     "source.organizeImports": "always"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.insertSpaces": true
+  "editor.insertSpaces": true,
+  "eslint.workingDirectories": ["./apps", "./packages"]
 }
