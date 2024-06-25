@@ -1,6 +1,7 @@
 {
   "extends": "@popshop/tsconfig/nextjs.json",
   "compilerOptions": {
+    "strict": true,
     "jsx": "preserve",
     "plugins": [
       {
