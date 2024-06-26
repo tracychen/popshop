@@ -1,12 +1,14 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+import { cn } from "@/lib/utils";
+
+import { Icons } from "./icons";
+import { buttonVariants } from "./ui/button";
 import { Input } from "./ui/input";
 import { toast } from "./ui/use-toast";
-import { useRouter } from "next/navigation";
-import { Icons } from "./icons";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "./ui/button";
 
 export function Search({
   className,

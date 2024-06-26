@@ -1,4 +1,5 @@
 import { useLogin, usePrivy } from "@privy-io/react-auth";
+
 import { Button } from "../ui/button";
 
 export const LogInButton = ({ ...props }) => {
@@ -14,12 +15,7 @@ export const LogInButton = ({ ...props }) => {
   });
 
   return (
-    <Button
-      className={props?.className}
-      variant={props?.variant || "default"}
-      disabled={!ready || authenticated}
-      onClick={login}
-    >
+    <Button {...props} disabled={!ready || authenticated} onClick={login}>
       {props?.children || "Log In"}
     </Button>
   );
