@@ -1,17 +1,19 @@
 // These styles apply to every route in the application
 import "./globals.css";
 
-import { Toaster } from "@/components/ui/toaster";
-import { cn } from "@/lib/utils";
-import { AuthProvider } from "@/providers/AuthProvider";
+import type { Metadata } from "next";
 import {
   Inter,
   Open_Sans,
   Poppins,
   Roboto_Mono,
   Sniglet,
-} from "@next/font/google";
-import type { Metadata } from "next";
+} from "next/font/google";
+
+import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
+import { AuthProvider } from "@/providers/auth-provider";
+import { ContractsProvider } from "@/providers/contracts-provider";
 
 export const metadata: Metadata = {
   title: "popshop",
@@ -65,8 +67,10 @@ export default async function RootLayout({
         className={cn("min-h-screen bg-background")}
       >
         <AuthProvider>
-          {children}
-          <Toaster />
+          <ContractsProvider>
+            {children}
+            <Toaster />
+          </ContractsProvider>
         </AuthProvider>
       </body>
     </html>
