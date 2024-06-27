@@ -1,20 +1,19 @@
-import { SettingsMenu } from "@/components/settings/settings-menu";
-
 const sidebarNavItems = [
   {
     title: "Account",
-    href: "/shop",
+    href: "/shops",
   },
   {
     title: "Display",
-    href: "/shop#display",
+    href: "/shops#display",
   },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="space-y-6 p-10 pb-16">
+      {children}
+      {/* <div className="space-y-6 p-10 pb-16">
         <div className="space-y-1">
           <h2 className="pt-24 text-xl tracking-tight selection:font-semibold">
             Browse Shops
@@ -29,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </aside>
           {children}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

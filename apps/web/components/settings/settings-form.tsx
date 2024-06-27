@@ -1,12 +1,14 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+
+import { cn } from "@/lib/utils";
+
 import { Icons } from "../icons";
 import { buttonVariants } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -85,10 +87,12 @@ export function SettingsForm({ user, className, ...props }: SettingsFormProps) {
         <Label htmlFor="imageUrl">Profile Picture</Label>
         <Input id="imageUrl" {...register("imageUrl")} type="file" />
         {errors.imageUrl && (
-          <p className="px-1 text-xs text-destructive">{errors.imageUrl.message}</p>
+          <p className="px-1 text-xs text-destructive">
+            {errors.imageUrl.message}
+          </p>
         )}
       </div>
-      <div className="items-center flex space-x-2">
+      <div className="flex items-center space-x-2">
         <Checkbox
           id="deleteAccount"
           {...register("deleteAccount")}
