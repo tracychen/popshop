@@ -88,6 +88,9 @@ contract Shop is Ownable, AccessControlEnumerable {
         uint256 purchaseIndex,
         uint256 amount
     );
+    event RewardStrategyRegistered(address indexed rewardStrategy);
+    event DiscountStrategyRegistered(address indexed discountStrategy);
+    event FeeShareStrategyRegistered(address indexed feeShareStrategy);
 
     constructor(
         string memory _shopMetadataURI,
@@ -249,9 +252,9 @@ contract Shop is Ownable, AccessControlEnumerable {
                 completed: false
             })
         );
+        purchaseCount[index]++;
         userPurchases[index][msg.sender].push(purchaseIndex);
         products[index].totalSold += count;
-        purchaseCount[index]++;
 
         // Provide buyer rewards
         if (products[index].rewardStrategy != address(0)) {
@@ -341,17 +344,20 @@ contract Shop is Ownable, AccessControlEnumerable {
     function registerRewardStrategy(address strategyAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
         IRewardStrategy rewardStrategy = IRewardStrategy(strategyAddress);
         rewardStrategies.push(rewardStrategy);
+        emit RewardStrategyRegistered(strategyAddress);
     }
 
     // Register discount strategy contract TODO prevent duplicate registration
     function registerDiscountStrategy(address strategyAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
         IDiscountStrategy discountStrategy = IDiscountStrategy(strategyAddress);
         discountStrategies.push(discountStrategy);
+        emit DiscountStrategyRegistered(strategyAddress);
     }
 
     // Register fee share strategy contract prevent duplicate registration
     function registerFeeShareStrategy(address strategyAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
         IFeeShareStrategy feeShareStrategy = IFeeShareStrategy(strategyAddress);
         feeShareStrategies.push(feeShareStrategy);
+        emit FeeShareStrategyRegistered(strategyAddress);
     }
 }

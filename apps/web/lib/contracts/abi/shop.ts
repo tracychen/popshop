@@ -664,6 +664,19 @@ export const abi = [
   },
   {
     type: "event",
+    name: "DiscountStrategyRegistered",
+    inputs: [
+      {
+        name: "discountStrategy",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "EarningsClaimed",
     inputs: [
       {
@@ -726,6 +739,19 @@ export const abi = [
         type: "uint256",
         indexed: false,
         internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "FeeShareStrategyRegistered",
+    inputs: [
+      {
+        name: "feeShareStrategy",
+        type: "address",
+        indexed: true,
+        internalType: "address",
       },
     ],
     anonymous: false,
@@ -937,6 +963,19 @@ export const abi = [
         type: "uint256",
         indexed: false,
         internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RewardStrategyRegistered",
+    inputs: [
+      {
+        name: "rewardStrategy",
+        type: "address",
+        indexed: true,
+        internalType: "address",
       },
     ],
     anonymous: false,
