@@ -37,10 +37,10 @@ import { RewardStrategyType, rewardStrategyTypeInfo } from "@/types/strategies";
 const baseSchema = z.object({
   strategyType: z.nativeEnum(RewardStrategyType),
   tokenAddress: z.string().optional().nullable(),
-  numTokens: z.number().int().positive().optional().nullable(),
-  multiplier: z.number().int().positive().optional().nullable(),
-  decayConstant: z.number().int().positive().optional().nullable(),
-  baseReward: z.number().int().positive().optional().nullable(),
+  numTokens: z.any().optional().nullable(),
+  multiplier: z.any().optional().nullable(),
+  decayConstant: z.any().optional().nullable(),
+  baseReward: z.any().optional().nullable(),
 });
 
 const schema = z.discriminatedUnion("strategyType", [
@@ -331,7 +331,7 @@ export function CreateRewardStrategyForm({
                       </p>
                       {errors.numTokens && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.numTokens.message}
+                          {errors.numTokens.message as string}
                         </p>
                       )}
                     </div>
@@ -382,7 +382,7 @@ export function CreateRewardStrategyForm({
                       </p>
                       {errors.multiplier && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.multiplier.message}
+                          {errors.multiplier.message as string}
                         </p>
                       )}
                     </div>
@@ -423,7 +423,7 @@ export function CreateRewardStrategyForm({
                       </p>
                       {errors.decayConstant && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.decayConstant.message}
+                          {errors.decayConstant.message as string}
                         </p>
                       )}
                     </div>
@@ -440,7 +440,7 @@ export function CreateRewardStrategyForm({
                       </p>
                       {errors.baseReward && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.baseReward.message}
+                          {errors.baseReward.message as string}
                         </p>
                       )}
                     </div>{" "}
@@ -500,7 +500,7 @@ export function CreateRewardStrategyForm({
                       </p>
                       {errors.numTokens && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.numTokens.message}
+                          {errors.numTokens.message as string}
                         </p>
                       )}
                     </div>

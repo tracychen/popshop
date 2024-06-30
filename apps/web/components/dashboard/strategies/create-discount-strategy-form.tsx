@@ -49,13 +49,13 @@ const maxDecimalPlaces = (places: number, value: number) => {
 
 const baseSchema = z.object({
   strategyType: z.nativeEnum(DiscountStrategyType),
-  percentage: z.number().optional().nullable(),
-  minBalance: z.number().optional().nullable(),
-  tokenAddress: z.string().optional().nullable(),
+  percentage: z.any().optional().nullable(),
+  minBalance: z.any().optional().nullable(),
+  tokenAddress: z.any().optional().nullable(),
   startTimestamp: z.number().optional().nullable(),
-  endTimestamp: z.number().optional().nullable(),
-  indexerAddress: z.string().optional().nullable(),
-  schemaUid: z.string().optional().nullable(),
+  endTimestamp: z.any().optional().nullable(),
+  indexerAddress: z.any().optional().nullable(),
+  schemaUid: z.any().optional().nullable(),
 });
 
 const schema = z.discriminatedUnion("strategyType", [
@@ -351,7 +351,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.percentage && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.percentage.message}
+                          {errors.percentage.message as string}
                         </p>
                       )}
                     </div>
@@ -368,7 +368,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.tokenAddress && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.tokenAddress.message}
+                          {errors.tokenAddress.message as string}
                         </p>
                       )}
                     </div>
@@ -397,7 +397,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.minBalance && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.minBalance.message}
+                          {errors.minBalance.message as string}
                         </p>
                       )}
                     </div>
@@ -424,7 +424,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.percentage && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.percentage.message}
+                          {errors.percentage.message as string}
                         </p>
                       )}
                     </div>
@@ -441,7 +441,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.tokenAddress && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.tokenAddress.message}
+                          {errors.tokenAddress.message as string}
                         </p>
                       )}
                     </div>
@@ -456,7 +456,7 @@ export function CreateDiscountStrategyForm({
                       />
                       {errors.minBalance && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.minBalance.message}
+                          {errors.minBalance.message as string}
                         </p>
                       )}
                     </div>
@@ -483,7 +483,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.percentage && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.percentage.message}
+                          {errors.percentage.message as string}
                         </p>
                       )}
                     </div>
@@ -511,7 +511,7 @@ export function CreateDiscountStrategyForm({
                       </p>
                       {errors.indexerAddress && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.indexerAddress.message}
+                          {errors.indexerAddress.message as string}
                         </p>
                       )}
                     </div>
@@ -524,7 +524,7 @@ export function CreateDiscountStrategyForm({
                       />
                       {errors.schemaUid && (
                         <p className="px-1 text-xs text-destructive">
-                          {errors.schemaUid.message}
+                          {errors.schemaUid.message as string}
                         </p>
                       )}
                     </div>
