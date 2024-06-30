@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -131,12 +130,13 @@ export function BuyProductForm({
       <Card x-chunk="dashboard-07-chunk-5">
         <CardHeader>
           <CardTitle>Purchase</CardTitle>
-          <CardDescription>
-            Please login to purchase this product.
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div></div>
+          <div className="grid gap-6">
+            <div className="text-sm text-muted-foreground">
+              Please login to purchase this product.
+            </div>
+          </div>
         </CardContent>
       </Card>
     );
