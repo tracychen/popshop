@@ -1,7 +1,5 @@
-export const metadata = {
-  title: "Shop | popshop*",
-};
+import { ShopsPage } from "@/components/shops/shops-page";
 
 export default async function Page() {
-  return <></>;
+  return <ShopsPage />;
 }
