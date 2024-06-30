@@ -12,7 +12,6 @@
     "@hookform/resolvers": "^3.1.1",
     "@phosphor-icons/react": "^2.1.6",
     "@pinata/sdk": "^2.1.0",
-    "@popshop/database": "*",
     "@privy-io/react-auth": "^1.72.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.0.3",
