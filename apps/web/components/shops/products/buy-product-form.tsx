@@ -18,6 +18,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -30,6 +31,7 @@ import { contracts } from "@/lib/contracts";
 import { cn } from "@/lib/utils";
 import { useContracts } from "@/providers/contracts-provider";
 import { Product } from "@/types";
+import SwapEth from "./swap-eth";
 
 const buyProductSchema = z.object({
   count: z.number().int().positive(),
@@ -261,6 +263,10 @@ export function BuyProductForm({
                 {totalPriceAfterDiscount} ETH
               </div>
             </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <div className="grid w-full gap-3">
             <Button
               type="submit"
               disabled={isSaving}
@@ -271,9 +277,11 @@ export function BuyProductForm({
               )}
               Submit
             </Button>
+            <SwapEth>
+              <Button variant="secondary">Swap ETH</Button>
+            </SwapEth>
           </div>
-          <div></div>
-        </CardContent>
+        </CardFooter>
       </Card>
     </form>
   );

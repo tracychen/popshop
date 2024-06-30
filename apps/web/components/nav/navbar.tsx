@@ -2,8 +2,8 @@
 import { usePrivy } from "@privy-io/react-auth";
 import { usePathname, useRouter } from "next/navigation";
 
-import { Button } from "../ui/button";
-import { Loader } from "../ui/loader";
+import { Button } from "@/components/ui/button";
+import { Loader } from "@/components/ui/loader";
 import { LogInButton } from "./login-button";
 import { UserMenu } from "./user-menu";
 

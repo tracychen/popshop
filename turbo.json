@@ -5,7 +5,8 @@
     "NEXT_PUBLIC_VERCEL_ENV",
     "NEXT_PUBLIC_PINATA_JWT",
     "PINATA_API_KEY",
-    "PINATA_API_SECRET"
+    "PINATA_API_SECRET",
+    "NEXT_PUBLIC_ONCHAIN_KIT_API_KEY"
   ],
   "tasks": {
     "build": {

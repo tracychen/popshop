@@ -1,6 +1,13 @@
 "use client";
 
 import {
+  Address,
+  Badge,
+  Avatar as CBKitAvatar,
+  Identity,
+  Name,
+} from "@coinbase/onchainkit/identity";
+import {
   Confetti,
   ShoppingCart,
   Storefront,
@@ -10,8 +17,7 @@ import { useRouter } from "next/navigation";
 
 import { cn, truncateString } from "@/lib/utils";
 
-import { Icons } from "../icons";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,8 +26,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { toast } from "../ui/use-toast";
+} from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
+import { Icons } from "../icons";
 
 export function UserMenu({
   user,
@@ -33,8 +40,8 @@ export function UserMenu({
   const router = useRouter();
 
   const { logout } = useLogout();
-
-  const username = truncateString(user.wallet?.address || "");
+  const address = user.wallet?.address as `0x${string}`;
+  const username = truncateString(address || "");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -59,10 +66,16 @@ export function UserMenu({
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{username}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {truncateString(user.wallet?.address || "")}
-            </p>
+            <Identity
+              address={address}
+              schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+            >
+              <CBKitAvatar address={address} />
+              <Name className="text-sm font-medium leading-none">
+                <Badge />
+              </Name>
+              <Address className="text-xs leading-none text-muted-foreground" />
+            </Identity>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "strictNullChecks": true,
+    "moduleResolution": "bundler",
     "jsx": "preserve",
     "plugins": [
       {

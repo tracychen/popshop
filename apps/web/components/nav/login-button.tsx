@@ -1,6 +1,6 @@
 import { useLogin, usePrivy } from "@privy-io/react-auth";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 export const LogInButton = ({ ...props }) => {
   const { ready, authenticated } = usePrivy();

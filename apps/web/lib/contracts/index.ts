@@ -79,6 +79,14 @@ export const contracts: {
     }[chain.id],
     abi: ShopFactoryABI,
   },
+  USDC: {
+    address: {
+      [anvil.id]: "0x63fea6E447F120B8Faf85B53cdaD8348e645D80E",
+      [baseSepolia.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      [base.id]: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", // TODO
+    }[chain.id],
+    abi: IERC20ABI,
+  },
   Shop: {
     abi: ShopABI,
   },

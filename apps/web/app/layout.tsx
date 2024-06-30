@@ -1,4 +1,5 @@
 // These styles apply to every route in the application
+import "@coinbase/onchainkit/tailwind.css";
 import "./globals.css";
 
 import type { Metadata } from "next";
@@ -14,6 +15,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/providers/auth-provider";
 import { ContractsProvider } from "@/providers/contracts-provider";
+import { OCKitProvider } from "@/providers/ockit-provider";
 
 export const metadata: Metadata = {
   title: "popshop",
@@ -66,12 +68,14 @@ export default async function RootLayout({
         suppressHydrationWarning={true}
         className={cn("min-h-screen bg-background")}
       >
-        <AuthProvider>
-          <ContractsProvider>
-            {children}
-            <Toaster />
-          </ContractsProvider>
-        </AuthProvider>
+        <OCKitProvider>
+          <AuthProvider>
+            <ContractsProvider>
+              {children}
+              <Toaster />
+            </ContractsProvider>
+          </AuthProvider>
+        </OCKitProvider>
       </body>
     </html>
   );
