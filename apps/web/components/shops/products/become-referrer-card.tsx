@@ -22,7 +22,7 @@ export function BecomeReferrerCard({
       }
 
       const wallet = wallets[0];
-      const referralLink = `https://popshop.com/shops/${shopAddress}/products${productId}?ref=${wallet.address}`;
+      const referralLink = `${window.location.origin}/shops/${shopAddress}/products/${productId}?ref=${wallet.address}`;
       navigator.clipboard.writeText(referralLink);
       toast({
         title: "Referral link copied",

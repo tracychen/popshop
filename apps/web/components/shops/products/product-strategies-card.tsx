@@ -134,18 +134,16 @@ export function ProductStrategiesCard({
     <Card x-chunk="dashboard-07-chunk-1">
       <CardHeader>
         <CardTitle>Discounts & Rewards</CardTitle>
-        {/* <CardDescription>
-          {shopMetadata?.name || "We"} luvs u!! Here are some ways you can
-          save/earn more by purchasing or referring others to this product.
-        </CardDescription> */}
       </CardHeader>
       <CardContent>
         <div className="grid gap-6">
-          <div className="text-sm">
-            <b>{shopMetadata?.name || "We"}</b> luvs u!! Here are some ways you
-            can save/earn more by purchasing or referring others to this
-            product.
-          </div>
+          {!loading && (
+            <div className="text-sm">
+              <b>{shopMetadata?.name || "We"}</b> luvs u!! Here are some ways
+              you can save/earn more by purchasing or referring others to this
+              product.
+            </div>
+          )}
           {loading ? (
             <div className="grid gap-3">
               <Skeleton className="h-6 w-1/3" />

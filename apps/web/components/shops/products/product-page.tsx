@@ -127,9 +127,9 @@ export function ProductPage({
   const shareText = `Check out this cool product on popshop*!`;
   const shareURL = useMemo(() => {
     if (wallets && wallets[0]) {
-      return `https://popshop.com/shops/${shopAddress}/products/${productId}?ref=${wallets[0].address}`;
+      return `${window.location.origin}/shops/${shopAddress}/products/${productId}?ref=${wallets[0].address}`;
     }
-    return `https://popshop.com/shops/${shopAddress}/products/${productId}`;
+    return `${window.location.origin}/shops/${shopAddress}/products/${productId}`;
   }, [shopAddress, productId, wallets]);
 
   return (
