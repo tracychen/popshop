@@ -19,7 +19,7 @@ export function OCKitProvider({ children }: { children?: React.ReactNode }) {
     >
       <QueryClientProvider client={queryClient}>
         <OnchainKitProvider
-          apiKey={process.env.COINBASE_ONCHAIN_KIT_API_KEY!}
+          apiKey={process.env.NEXT_PUBLIC_ONCHAIN_KIT_API_KEY!}
           chain={chain}
         >
           {children}
