@@ -78,7 +78,6 @@ export const abi = [
     type: "function",
     name: "claimEarnings",
     inputs: [
-      { name: "productId", type: "uint256", internalType: "uint256" },
       {
         name: "purchaseIndex",
         type: "uint256",
@@ -92,9 +91,8 @@ export const abi = [
     type: "function",
     name: "completePurchase",
     inputs: [
-      { name: "productId", type: "uint256", internalType: "uint256" },
       {
-        name: "userPurchaseIndex",
+        name: "purchaseIndex",
         type: "uint256",
         internalType: "uint256",
       },
@@ -200,6 +198,51 @@ export const abi = [
   },
   {
     type: "function",
+    name: "getPurchases",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "tuple[]",
+        internalType: "struct Shop.Purchase[]",
+        components: [
+          { name: "id", type: "uint256", internalType: "uint256" },
+          {
+            name: "productId",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          { name: "buyer", type: "address", internalType: "address" },
+          { name: "count", type: "uint256", internalType: "uint256" },
+          {
+            name: "amountPaid",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "sellerAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "purchaseTime",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "refundAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          { name: "refunded", type: "bool", internalType: "bool" },
+          { name: "completed", type: "bool", internalType: "bool" },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "getRewardStrategies",
     inputs: [],
     outputs: [
@@ -292,6 +335,23 @@ export const abi = [
   },
   {
     type: "function",
+    name: "productPurchaseCount",
+    inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "productPurchaseIndexes",
+    inputs: [
+      { name: "", type: "uint256", internalType: "uint256" },
+      { name: "", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "products",
     inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     outputs: [
@@ -321,13 +381,6 @@ export const abi = [
   },
   {
     type: "function",
-    name: "purchaseCount",
-    inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "purchaseProduct",
     inputs: [
       { name: "index", type: "uint256", internalType: "uint256" },
@@ -344,11 +397,9 @@ export const abi = [
   {
     type: "function",
     name: "purchases",
-    inputs: [
-      { name: "", type: "uint256", internalType: "uint256" },
-      { name: "", type: "uint256", internalType: "uint256" },
-    ],
+    inputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     outputs: [
+      { name: "id", type: "uint256", internalType: "uint256" },
       { name: "productId", type: "uint256", internalType: "uint256" },
       { name: "buyer", type: "address", internalType: "address" },
       { name: "count", type: "uint256", internalType: "uint256" },
@@ -375,9 +426,8 @@ export const abi = [
   },
   {
     type: "function",
-    name: "refundProduct",
+    name: "refundPurchase",
     inputs: [
-      { name: "productId", type: "uint256", internalType: "uint256" },
       {
         name: "purchaseIndex",
         type: "uint256",
@@ -610,19 +660,19 @@ export const abi = [
   },
   {
     type: "function",
-    name: "userPurchases",
+    name: "userPurchaseCount",
+    inputs: [{ name: "", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "userPurchaseIndexes",
     inputs: [
-      { name: "", type: "uint256", internalType: "uint256" },
       { name: "", type: "address", internalType: "address" },
       { name: "", type: "uint256", internalType: "uint256" },
     ],
-    outputs: [
-      {
-        name: "purchaseIndexes",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
   },
   {

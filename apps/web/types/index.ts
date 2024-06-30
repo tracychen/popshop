@@ -20,6 +20,7 @@ export type Shop = {
 };
 
 export type Purchase = {
+  id: number;
   productId: number;
   buyer: string;
   count: number;

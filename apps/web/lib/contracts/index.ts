@@ -70,7 +70,7 @@ export const contracts: {
 } = {
   ShopRegistry: {
     address: {
-      [anvil.id]: "0x21997EA4268EeCfeC48f1d404819cC7Aa37872Dc",
+      [anvil.id]: "0x51d903DCc750Df34E1C44FEcaa0B5D8cCE407a0d",
       [baseSepolia.id]: "0x1234567890123456789012345678901234567890", // TODO
       [base.id]: "0x1234567890123456789012345678901234567890", // TODO
     }[chain.id],
@@ -78,7 +78,7 @@ export const contracts: {
   },
   ShopFactory: {
     address: {
-      [anvil.id]: "0xE359026904289EC64FE240BE61D91eaE4a8F0E8F",
+      [anvil.id]: "0xD8EdC95e9463Cfb4304C9a3DC84c7fb3872B3b07",
       [baseSepolia.id]: "0x1234567890123456789012345678901234567890", // TODO
       [base.id]: "0x1234567890123456789012345678901234567890", // TODO
     }[chain.id],
