@@ -52,7 +52,7 @@ export function ShopsPage() {
   }, []);
 
   return (
-    <main className="h-screen bg-secondary bg-cover bg-center p-6">
+    <main className="p-6">
       {loading ? (
         <Skeleton className="h-full w-full" />
       ) : (

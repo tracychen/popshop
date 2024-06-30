@@ -15,7 +15,7 @@ import { toast } from "@/components/ui/use-toast";
 import { truncateStringMiddle } from "@/lib/utils";
 
 export function ShopPage({ shopAddress }: { shopAddress: string }) {
-  const { publicClient, shopRegistryContract } = useContracts();
+  const { shopRegistryContract } = useContracts();
   const [loading, setLoading] = useState(true);
   const [shop, setShop] = useState<Shop>();
 
@@ -47,7 +47,7 @@ export function ShopPage({ shopAddress }: { shopAddress: string }) {
     fetchShop();
   }, [shopAddress]);
   return (
-    <div className="h-screen w-full bg-secondary lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+    <div className="h-screen min-h-screen w-full lg:grid lg:grid-cols-2">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-96 gap-6 px-4">
           <div className="grid gap-3 text-center">
@@ -100,7 +100,7 @@ export function ShopPage({ shopAddress }: { shopAddress: string }) {
           </div>
         </div>
       </div>
-      <div className="">
+      <div className="lg:h-screen">
         {loading ? (
           <Skeleton className="h-full w-full" />
         ) : (
