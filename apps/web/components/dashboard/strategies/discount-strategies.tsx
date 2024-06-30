@@ -49,6 +49,7 @@ import {
 
 import { ActionDialog, ActionDialogTab } from "./actions/action-dialog";
 import { getUpdateAllowlistBpsAction } from "./actions/update-allowlist-bps-action";
+import { getUpdateEASSchemaAction } from "./actions/update-eas-schema-action";
 import { getUpdateMinBalanceAction } from "./actions/update-min-balance-action";
 import { getUpdateMinBalanceERC20Action } from "./actions/update-min-balance-erc20-action";
 import { getUpdatePercentageAction } from "./actions/update-percentage-action";
@@ -122,7 +123,7 @@ export function DiscountStrategies() {
           actions = [
             getUpdatePercentageAction({
               // @ts-ignore
-              initalBps: await strategyContract.read.bps(),
+              initialBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getDiscountStrategies,
             }),
@@ -159,7 +160,7 @@ export function DiscountStrategies() {
           actions = [
             getUpdatePercentageAction({
               // @ts-ignore
-              initalBps: await strategyContract.read.bps(),
+              initialBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getDiscountStrategies,
             }),
@@ -190,6 +191,42 @@ export function DiscountStrategies() {
           };
           actions = [
             getUpdateAllowlistBpsAction({
+              strategyContract,
+              refresh: getDiscountStrategies,
+            }),
+          ];
+          break;
+        }
+        case DiscountStrategyType.EAS_ATTESTATION_DISCOUNT: {
+          // @ts-ignore
+          const strategyContract = getContract({
+            address: strategyAddress,
+            abi: contracts[DiscountStrategyType.EAS_ATTESTATION_DISCOUNT].abi,
+            client: {
+              public: publicClient,
+              wallet: walletClient,
+            },
+          });
+          // @ts-ignore
+          const initialIndexerAddress = await strategyContract.read.indexer();
+          // @ts-ignore
+          const initialSchemaUid = await strategyContract.read.schemaUid([]);
+          // @ts-ignore
+          const initialBps = await strategyContract.read.bps();
+          variables = {
+            ["Percentage Discount"]: `${Number(initialBps) / 100}%`,
+            ["Schema ID"]: initialSchemaUid,
+            ["Indexer Address"]: initialIndexerAddress,
+          };
+          actions = [
+            getUpdatePercentageAction({
+              initialBps,
+              strategyContract,
+              refresh: getDiscountStrategies,
+            }),
+            getUpdateEASSchemaAction({
+              initialIndexerAddress,
+              initialSchemaUid,
               strategyContract,
               refresh: getDiscountStrategies,
             }),

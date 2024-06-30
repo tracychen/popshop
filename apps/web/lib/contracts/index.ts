@@ -11,6 +11,10 @@ import {
   abi as AllowlistDiscountStrategyABI,
   bytecode as AllowlistDiscountStrategyBytecode,
 } from "./abi/discount/allowlist-discount-strategy";
+import {
+  abi as EASAttestationDiscountStrategyABI,
+  bytecode as EASAttestationStrategyBytecode,
+} from "./abi/discount/eas-attestation-discount-strategy";
 import { abi as IDiscountStrategyABI } from "./abi/discount/i-discount-strategy";
 import {
   abi as MinERC20DiscountStrategyABI,
@@ -20,6 +24,7 @@ import {
   abi as MinERC721DiscountStrategyABI,
   bytecode as MinERC721DiscountStrategyBytecode,
 } from "./abi/discount/min-erc721-discount-strategy";
+import { abi as IAttestationIndexerABI } from "./abi/eas/i-attestation-indexer";
 import {
   abi as AllowlistPercentageFeeShareStrategyABI,
   bytecode as AllowlistPercentageFeeShareStrategyBytecode,
@@ -83,9 +88,17 @@ export const contracts: {
     address: {
       [anvil.id]: "0x63fea6E447F120B8Faf85B53cdaD8348e645D80E",
       [baseSepolia.id]: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
-      [base.id]: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", // TODO
+      [base.id]: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
     }[chain.id],
     abi: IERC20ABI,
+  },
+  CoinbaseEASIndexer: {
+    address: {
+      [anvil.id]: "0x3b4c0f8f4a0c4c8c4c0a6b3f5e7b4f7e9b2e7c5f",
+      [baseSepolia.id]: "0xd147a19c3B085Fb9B0c15D2EAAFC6CB086ea849B",
+      [base.id]: "	0x2c7eE1E5f416dfF40054c27A62f7B357C4E8619C",
+    }[chain.id],
+    abi: IAttestationIndexerABI,
   },
   Shop: {
     abi: ShopABI,
@@ -144,5 +157,9 @@ export const contracts: {
   [DiscountStrategyType.MIN_ERC721_DISCOUNT]: {
     abi: MinERC721DiscountStrategyABI,
     bytecode: MinERC721DiscountStrategyBytecode,
+  },
+  [DiscountStrategyType.EAS_ATTESTATION_DISCOUNT]: {
+    abi: EASAttestationDiscountStrategyABI,
+    bytecode: EASAttestationStrategyBytecode,
   },
 };

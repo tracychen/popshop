@@ -97,7 +97,7 @@ export function FeeShareStrategies() {
           actions = [
             getUpdatePercentageAction({
               // @ts-ignore
-              initalBps: await strategyContract.read.bps(),
+              initialBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getFeeShareStrategies,
             }),
@@ -136,7 +136,7 @@ export function FeeShareStrategies() {
           actions = [
             getUpdatePercentageAction({
               // @ts-ignore
-              initalBps: await strategyContract.read.bps(),
+              initialBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getFeeShareStrategies,
             }),
@@ -174,7 +174,7 @@ export function FeeShareStrategies() {
           actions = [
             getUpdatePercentageAction({
               // @ts-ignore
-              initalBps: await strategyContract.read.bps(),
+              initialBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getFeeShareStrategies,
             }),

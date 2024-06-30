@@ -35,11 +35,11 @@ const schema = z.object({
 type UpdatePercentageFormData = z.infer<typeof schema>;
 
 function UpdatePercentageAction({
-  initalBps,
+  initialBps,
   strategyContract,
   refresh,
 }: {
-  initalBps: number;
+  initialBps: number;
   strategyContract: any;
   refresh: () => Promise<void>;
 }) {
@@ -52,7 +52,7 @@ function UpdatePercentageAction({
   } = useForm<UpdatePercentageFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      percentage: Number(initalBps) / BPS_MULTIPLIER,
+      percentage: Number(initialBps) / BPS_MULTIPLIER,
     },
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -88,7 +88,6 @@ function UpdatePercentageAction({
         title: "Success",
         description: "Updated successfully",
       });
-      reset();
       await refresh();
     } catch (error: any) {
       console.error(error);
@@ -140,11 +139,11 @@ function UpdatePercentageAction({
 }
 
 export const getUpdatePercentageAction = ({
-  initalBps,
+  initialBps,
   strategyContract,
   refresh,
 }: {
-  initalBps: number;
+  initialBps: number;
   strategyContract: any;
   refresh: () => Promise<void>;
 }): ActionDialogTab => {
@@ -156,7 +155,7 @@ export const getUpdatePercentageAction = ({
       "Update the percentage of the purchase price that will be applied for the strategy.",
     tabContent: (
       <UpdatePercentageAction
-        initalBps={initalBps}
+        initialBps={initialBps}
         strategyContract={strategyContract}
         refresh={refresh}
       />

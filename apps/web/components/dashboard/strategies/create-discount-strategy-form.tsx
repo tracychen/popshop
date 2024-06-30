@@ -30,6 +30,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { chain } from "@/lib/chain";
 import { contracts } from "@/lib/contracts";
+import { truncateStringMiddle } from "@/lib/utils";
 import { useContracts } from "@/providers/contracts-provider";
 import { useSelectShop } from "@/providers/select-shop-provider";
 import {
@@ -53,6 +54,8 @@ const baseSchema = z.object({
   tokenAddress: z.string().optional().nullable(),
   startTimestamp: z.number().optional().nullable(),
   endTimestamp: z.number().optional().nullable(),
+  indexerAddress: z.string().optional().nullable(),
+  schemaUid: z.string().optional().nullable(),
 });
 
 const schema = z.discriminatedUnion("strategyType", [
@@ -86,6 +89,22 @@ const schema = z.discriminatedUnion("strategyType", [
   }),
   baseSchema.extend({
     strategyType: z.literal(DiscountStrategyType.ALLOWLIST_DISCOUNT),
+  }),
+  baseSchema.extend({
+    strategyType: z.literal(DiscountStrategyType.EAS_ATTESTATION_DISCOUNT),
+    percentage: z
+      .number()
+      .gte(0)
+      .lte(BPS_MULTIPLIER)
+      .refine((val) => maxDecimalPlaces(MAX_DECIMAL_PLACES, val), {
+        message: `Number must have no more than ${MAX_DECIMAL_PLACES} decimal places`,
+      }),
+    indexerAddress: z
+      .string()
+      .refine((value) => isAddress(value), { message: "Invalid address" }),
+    schemaUid: z.string().refine((value) => value.length === 66, {
+      message: "Invalid schema UID",
+    }),
   }),
 ]);
 
@@ -166,6 +185,13 @@ export function CreateDiscountStrategyForm({
         break;
       case DiscountStrategyType.ALLOWLIST_DISCOUNT:
         // dont need to pass any extra arguments
+        break;
+      case DiscountStrategyType.EAS_ATTESTATION_DISCOUNT:
+        args.push(
+          data.percentage! * BPS_MULTIPLIER,
+          data.schemaUid,
+          data.indexerAddress,
+        );
         break;
     }
 
@@ -431,6 +457,74 @@ export function CreateDiscountStrategyForm({
                       {errors.minBalance && (
                         <p className="px-1 text-xs text-destructive">
                           {errors.minBalance.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {selectedStrategyType ===
+                  DiscountStrategyType.EAS_ATTESTATION_DISCOUNT && (
+                  <div className="grid gap-6">
+                    <div className="grid gap-3">
+                      <Label htmlFor="percentage">
+                        Percentage of Purchase Price
+                      </Label>
+                      <Input
+                        id="percentage"
+                        {...register("percentage", { valueAsNumber: true })}
+                        type="number"
+                        placeholder="1.25"
+                        step="any"
+                      />
+                      <p className="px-1 text-xs text-muted-foreground">
+                        The buyer will receive a {watch("percentage") || 0}%
+                        discount on their total purchase price.
+                      </p>
+                      {errors.percentage && (
+                        <p className="px-1 text-xs text-destructive">
+                          {errors.percentage.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="indexerAddress">Indexer Address</Label>
+                      <Input
+                        id="indexerAddress"
+                        placeholder="0x2c7eE1E5f416dfF40054c27A62f7B357C4E8619C"
+                        {...register("indexerAddress")}
+                      />
+                      <p className="px-1 text-xs text-muted-foreground">
+                        Make sure this is the indexer address on {chain.name}.
+                        For example, the Coinbase Indexer is{" "}
+                        <Link
+                          href="https://basescan.org/address/0x2c7eE1E5f416dfF40054c27A62f7B357C4E8619C"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline"
+                        >
+                          {truncateStringMiddle(
+                            "0x2c7ee1e5f416dff40054c27a62f7b357c4e8619c",
+                          )}
+                        </Link>{" "}
+                        on Base.
+                      </p>
+                      {errors.indexerAddress && (
+                        <p className="px-1 text-xs text-destructive">
+                          {errors.indexerAddress.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="grid gap-3">
+                      <Label htmlFor="schemaUid">EAS Schema</Label>
+                      <Input
+                        id="schemaUid"
+                        placeholder="0x2f34a2ffe5f87b2f45fbc7c784896b768d77261e2f24f77341ae43751c765a69"
+                        {...register("schemaUid")}
+                      />
+                      {errors.schemaUid && (
+                        <p className="px-1 text-xs text-destructive">
+                          {errors.schemaUid.message}
                         </p>
                       )}
                     </div>

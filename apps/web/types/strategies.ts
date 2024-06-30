@@ -58,6 +58,7 @@ export enum DiscountStrategyType {
   MIN_ERC721_DISCOUNT = "MIN_ERC721_DISCOUNT",
   TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT = "TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT",
   TIMEFRAME_DISCOUNT = "TIMEFRAME_DISCOUNT",
+  EAS_ATTESTATION_DISCOUNT = "EAS_ATTESTATION_DISCOUNT",
 }
 
 export const discountStrategyTypeInfo = {
@@ -65,6 +66,11 @@ export const discountStrategyTypeInfo = {
     name: "Allowlist",
     description:
       "Discount for a specific list of buyers. Allowlist can be added and modified after creating the strategy and diffferent discounts can be set for each buyer.",
+  },
+  [DiscountStrategyType.EAS_ATTESTATION_DISCOUNT]: {
+    name: "EAS Attestation",
+    description:
+      "Discount for buyers that have a specific EAS attestation, for example Coinbase Verified Account.",
   },
   [DiscountStrategyType.MIN_ERC20_DISCOUNT]: {
     name: "Min. ERC20 Balance",
