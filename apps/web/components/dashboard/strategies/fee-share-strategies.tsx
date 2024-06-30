@@ -227,6 +227,13 @@ export function FeeShareStrategies() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {!feeShareStrategies.length && (
+              <TableRow className="hover:bg-background">
+                <TableCell colSpan={4} className="pt-6 text-center">
+                  No discount strategies found.
+                </TableCell>
+              </TableRow>
+            )}
             {feeShareStrategies &&
               feeShareStrategies.map((strategy) => (
                 <TableRow key={strategy.contractAddress}>

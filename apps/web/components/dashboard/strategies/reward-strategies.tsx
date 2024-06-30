@@ -378,6 +378,13 @@ export function RewardStrategies() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {!rewardStrategies.length && (
+              <TableRow className="hover:bg-background">
+                <TableCell colSpan={4} className="pt-6 text-center">
+                  No discount strategies found.
+                </TableCell>
+              </TableRow>
+            )}
             {rewardStrategies &&
               rewardStrategies.map((strategy) => (
                 <TableRow key={strategy.contractAddress}>

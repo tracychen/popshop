@@ -272,6 +272,13 @@ export function DiscountStrategies() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {!strategies.length && (
+              <TableRow className="hover:bg-background">
+                <TableCell colSpan={4} className="pt-6 text-center">
+                  No discount strategies found.
+                </TableCell>
+              </TableRow>
+            )}
             {strategies &&
               strategies.map((strategy) => (
                 <TableRow key={strategy.contractAddress}>
