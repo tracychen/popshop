@@ -282,11 +282,12 @@ export function AddProductForm() {
 
       // reset form
       reset();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast({
         title: "Error",
         description:
+          error.message ||
           "Error adding product. Please contact us or try again later.",
         variant: "destructive",
       });

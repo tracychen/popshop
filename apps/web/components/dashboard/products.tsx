@@ -1,11 +1,5 @@
 "use client";
-import {
-  ArrowDown,
-  ArrowUp,
-  FileArrowDown,
-  Funnel,
-  PlusCircle,
-} from "@phosphor-icons/react";
+import { ArrowDown, ArrowUp, Funnel, PlusCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { formatEther } from "viem";
@@ -208,12 +202,12 @@ export function ProductsDashboard() {
                 </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button size="sm" variant="outline" className="h-7 gap-1">
+            {/* <Button size="sm" variant="outline" className="h-7 gap-1">
               <FileArrowDown className="h-3.5 w-3.5" weight="fill" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Export
               </span>
-            </Button>
+            </Button> */}
             <Button
               size="sm"
               className="h-7 gap-1"

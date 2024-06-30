@@ -18,3 +18,15 @@ export type Shop = {
   description: string;
   image: string;
 };
+
+export type Purchase = {
+  productId: number;
+  buyer: string;
+  count: number;
+  amountPaid: string;
+  sellerAmount: string;
+  purchaseTime: number;
+  refundAmount: string;
+  refunded: boolean;
+  completed: boolean;
+};

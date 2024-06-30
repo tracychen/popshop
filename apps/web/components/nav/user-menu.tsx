@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
+import { coinbaseVerifiedAccountSchema } from "@/lib/eas";
 import { Icons } from "../icons";
 
 export function UserMenu({
@@ -68,7 +69,7 @@ export function UserMenu({
           <div className="flex flex-col space-y-1">
             <Identity
               address={address}
-              schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+              schemaId={coinbaseVerifiedAccountSchema}
             >
               <CBKitAvatar address={address} />
               <Name className="text-sm font-medium leading-none">
