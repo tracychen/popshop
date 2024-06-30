@@ -94,7 +94,7 @@ const enum Filter {
 export function OrdersDashboard() {
   const { shop, shopContract } = useSelectShop();
   const [orders, setOrders] = useState<Purchase[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<{ [key: number]: Product }>([]);
   const [sort, setSort] = useState<Sort>(Sort.ProductIDAsc);
   const [filter, setFilter] = useState<Filter>(Filter.All);
 
@@ -134,47 +134,66 @@ export function OrdersDashboard() {
 
   const getOrders = async () => {
     try {
-      const products = await shopContract.read.getProducts();
+      const purchases = await shopContract.read.getPurchases();
+      const formattedPurchases: Purchase[] = [];
+      const productIds = new Set<number>();
+
+      // Format purchases
+      for (const purchase of purchases) {
+        formattedPurchases.push({
+          id: Number(purchase.id),
+          productId: Number(purchase.productId),
+          buyer: purchase.buyer,
+          count: Number(purchase.count),
+          amountPaid: String(purchase.amountPaid),
+          sellerAmount: String(purchase.sellerAmount),
+          purchaseTime: Number(purchase.purchaseTime),
+          refundAmount: String(purchase.refundAmount),
+          refunded: purchase.refunded,
+          completed: purchase.completed,
+        });
+        productIds.add(purchase.productId);
+      }
+
+      // Get product metadata for each product
       const formattedProducts = await Promise.all(
-        products.map(async (product: any) => {
-          const metadata = await getProductMetadata(product);
+        Array.from(productIds).map(async (productId: number) => {
+          const [
+            id,
+            metadataURI,
+            supply,
+            price,
+            discountStrategy,
+            feeShareStrategy,
+            rewardStrategy,
+            paused,
+            totalSold,
+          ] = await shopContract.read.products([productId]);
+          const metadata = await getProductMetadata({ metadataURI });
           return {
-            id: product.id,
+            id: Number(id),
             name: metadata.name,
             description: metadata.description,
             imageUrls: metadata.imageUrls,
-            active: !product.paused,
-            price: formatEther(product.price),
-            totalSold: Number(product.totalSold),
-            supply: Number(product.supply),
+            active: !paused,
+            price: Number(formatEther(price)),
+            totalSold: Number(totalSold),
+            supply: Number(supply),
+            discountStrategy,
+            feeShareStrategy,
+            rewardStrategy,
           };
         }),
       );
-      setProducts(formattedProducts);
 
-      const purchases: Purchase[] = [];
-      for (const product of products) {
-        const purchaseCount = await shopContract.read.purchaseCount([
-          product.id,
-        ]);
-        for (let i = 0; i < purchaseCount; i++) {
-          const purchase = await shopContract.read.purchases([product.id, i]);
-          const buyer = purchase[1];
-          purchases.push({
-            productId: product.id,
-            buyer: buyer,
-            count: Number(purchase[2]),
-            amountPaid: String(purchase[3]),
-            sellerAmount: String(purchase[4]),
-            purchaseTime: Number(purchase[5]),
-            refundAmount: String(purchase[6]),
-            refunded: purchase[7],
-            completed: purchase[8],
-          });
-        }
-      }
-      console.log("purchases", purchases);
-      setOrders(purchases);
+      // Convert to map of product id to product
+      const productMap: { [key: number]: Product } = {};
+      formattedProducts.forEach((product) => {
+        productMap[product.id] = product;
+      });
+
+      setOrders(formattedPurchases);
+      setProducts(productMap);
     } catch (error: any) {
       console.error(error);
       toast({
@@ -188,26 +207,22 @@ export function OrdersDashboard() {
   };
 
   useEffect(() => {
-    if (shop && shopContract) {
-      getOrders();
-    }
-  }, [shop]);
-
-  useEffect(() => {
     orders.sort(sortFunctions[sort]);
     setOrders([...orders]);
   }, [sort]);
 
   useEffect(() => {
     if (filter === Filter.All) {
-      getOrders();
+      if (shop && shopContract) {
+        getOrders();
+      }
     } else {
       const filteredOrders = orders.filter(
         (order) => getOrderStatus(order) === filter,
       );
       setOrders(filteredOrders);
     }
-  }, [filter]);
+  }, [shop, filter]);
 
   if (!shop) {
     return (

@@ -96,8 +96,6 @@ export function BuyProductForm({
   }, [product, count, discount]);
 
   const getDiscount = async (product: Product) => {
-    console.log(walletClient!.account);
-
     // @ts-ignore
     const strategyContract = getContract({
       address: product.discountStrategy as `0x${string}`,
