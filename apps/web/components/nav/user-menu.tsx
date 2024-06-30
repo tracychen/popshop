@@ -88,14 +88,14 @@ export function UserMenu({
             className="cursor-pointer"
             onSelect={() => router.push("/shops")}
           >
-            <ShoppingCart className="mr-2 h-4 w-4" weight="fill" />
-            Explore
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            Shop
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer"
             onSelect={() => router.push("/dashboard")}
           >
-            <Storefront className="mr-2 h-4 w-4" weight="fill" />
+            <Storefront className="mr-2 h-4 w-4" />
             Manage Shops
           </DropdownMenuItem>
           <DropdownMenuItem

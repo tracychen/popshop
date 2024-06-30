@@ -36,6 +36,14 @@ export function ShopNav({ children }: { children: React.ReactNode }) {
           >
             Shops
           </Link>
+          {ready && user && (
+            <Link
+              href="/orders"
+              className="text-foreground transition-colors hover:text-foreground"
+            >
+              Orders
+            </Link>
+          )}
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -60,6 +68,11 @@ export function ShopNav({ children }: { children: React.ReactNode }) {
               <Link href="/shops" className="hover:text-foreground">
                 Shops
               </Link>
+              {ready && user && (
+                <Link href="/orders" className="hover:text-foreground">
+                  Orders
+                </Link>
+              )}
             </nav>
           </SheetContent>
         </Sheet>

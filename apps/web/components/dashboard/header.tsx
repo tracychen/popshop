@@ -68,7 +68,7 @@ export function DashboardHeader({
       <span className="hidden font-sniglet text-2xl text-primary sm:flex">
         popshop*
       </span>
-      <p className="hidden sm:flex">{pageName}</p>
+      <p className="hidden text-sm font-medium sm:flex">{pageName}</p>
       <div className="relative ml-auto flex-1 md:grow-0">
         <ShopSelect />
       </div>
