@@ -236,7 +236,7 @@ export function OrdersPage() {
         <Card x-chunk="dashboard-05-chunk-3">
           <CardHeader className="px-7">
             <CardTitle>Orders</CardTitle>
-            <CardDescription>Recent orders from your store.</CardDescription>
+            <CardDescription>Your popshop* purchases</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
