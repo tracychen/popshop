@@ -1,10 +1,4 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron",
-      "schedule": "0 8 * * *"
-    }
-  ],
   "functions": {
     "app/api/**/*": {
       "maxDuration": 30
