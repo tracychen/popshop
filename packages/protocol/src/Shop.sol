@@ -32,6 +32,7 @@ contract Shop is Ownable, AccessControlEnumerable {
     }
 
     struct Purchase {
+        uint256 id;
         uint256 productId;
         address buyer;
         uint256 count;
@@ -43,10 +44,19 @@ contract Shop is Ownable, AccessControlEnumerable {
         bool completed;
     }
 
+    /// @dev Track all products in the shop
     Product[] public products;
-    mapping(uint256 => mapping(address => uint256[] purchaseIndexes)) public userPurchases;
-    mapping(uint256 => Purchase[]) public purchases;
-    mapping(uint256 => uint256) public purchaseCount;
+
+    /// @dev Track all purchases in the shop
+    Purchase[] public purchases;
+
+    /// @dev Track purchases per buyer
+    mapping(address => uint256[]) public userPurchaseIndexes;
+    mapping(address => uint256) public userPurchaseCount;
+
+    /// @dev Track purchases per product
+    mapping(uint256 => uint256[]) public productPurchaseIndexes;
+    mapping(uint256 => uint256) public productPurchaseCount;
 
     // track shop strategies
     IRewardStrategy[] public rewardStrategies;
@@ -208,7 +218,7 @@ contract Shop is Ownable, AccessControlEnumerable {
         require(count > 0, "Invalid count");
 
         uint256 price = products[index].price * count;
-        uint256 purchaseIndex = purchases[index].length;
+        uint256 purchaseIndex = purchases.length;
 
         // Apply discount
         if (products[index].discountStrategy != address(0)) {
@@ -239,8 +249,9 @@ contract Shop is Ownable, AccessControlEnumerable {
         }
 
         // Record purchase
-        purchases[index].push(
+        purchases.push(
             Purchase({
+                id: purchaseIndex,
                 productId: index,
                 buyer: msg.sender,
                 count: count,
@@ -252,8 +263,11 @@ contract Shop is Ownable, AccessControlEnumerable {
                 completed: false
             })
         );
-        purchaseCount[index]++;
-        userPurchases[index][msg.sender].push(purchaseIndex);
+
+        userPurchaseIndexes[msg.sender].push(purchaseIndex);
+        userPurchaseCount[msg.sender]++;
+        productPurchaseIndexes[index].push(purchaseIndex);
+        productPurchaseCount[index]++;
         products[index].totalSold += count;
 
         // Provide buyer rewards
@@ -269,25 +283,20 @@ contract Shop is Ownable, AccessControlEnumerable {
         emit ProductPurchased(index, msg.sender, purchaseIndex, price);
     }
 
-    function completePurchase(uint256 productId, uint256 userPurchaseIndex) public {
-        require(productId < products.length, "Invalid product index");
-        // todo add some checks
-        uint256 purchaseIndex = userPurchases[productId][msg.sender][userPurchaseIndex];
-        Purchase storage purchase = purchases[productId][purchaseIndex];
+    function completePurchase(uint256 purchaseIndex) public {
+        require(purchaseIndex < purchases.length, "Invalid purchase index");
+        Purchase storage purchase = purchases[purchaseIndex];
+        require(purchase.buyer == msg.sender, "Unauthorized");
         require(purchase.amountPaid > 0, "No purchase found");
         require(!purchase.completed, "Purchase already completed");
 
         purchase.completed = true;
 
-        emit PurchaseCompleted(productId, msg.sender, purchaseIndex);
+        emit PurchaseCompleted(purchase.productId, msg.sender, purchaseIndex);
     }
 
-    function refundProduct(uint256 productId, uint256 purchaseIndex, uint256 refundAmount)
-        public
-        payable
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
-        Purchase storage purchase = purchases[productId][purchaseIndex];
+    function refundPurchase(uint256 purchaseIndex, uint256 refundAmount) public payable onlyRole(DEFAULT_ADMIN_ROLE) {
+        Purchase storage purchase = purchases[purchaseIndex];
         require(purchase.amountPaid > 0, "No purchase found");
         require(!purchase.refunded, "Already refunded");
         require(
@@ -303,11 +312,11 @@ contract Shop is Ownable, AccessControlEnumerable {
         }
 
         payable(purchase.buyer).transfer(refundAmount);
-        emit ProductRefunded(productId, purchase.buyer, purchaseIndex, refundAmount);
+        emit ProductRefunded(purchase.productId, purchase.buyer, purchaseIndex, refundAmount);
     }
 
-    function claimEarnings(uint256 productId, uint256 purchaseIndex) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        Purchase storage purchase = purchases[productId][purchaseIndex];
+    function claimEarnings(uint256 purchaseIndex) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        Purchase storage purchase = purchases[purchaseIndex];
         require(purchase.amountPaid > 0, "No purchase found"); // TODO do we need to handle products that are $0?
         require(purchase.sellerAmount > 0, "No earnings to claim");
         require(!purchase.refunded, "Purchase refunded");
@@ -321,11 +330,15 @@ contract Shop is Ownable, AccessControlEnumerable {
 
         payable(payoutAddress).transfer(amountToClaim);
 
-        emit EarningsClaimed(productId, payoutAddress, purchaseIndex, amountToClaim);
+        emit EarningsClaimed(purchase.productId, payoutAddress, purchaseIndex, amountToClaim);
     }
 
     function getProducts() public view returns (Product[] memory) {
         return products;
+    }
+
+    function getPurchases() public view returns (Purchase[] memory) {
+        return purchases;
     }
 
     function getRewardStrategies() public view returns (IRewardStrategy[] memory) {
