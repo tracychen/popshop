@@ -36,6 +36,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/components/ui/use-toast";
 import { coinbaseVerifiedAccountSchema } from "@/lib/eas";
+import { useContracts } from "@/providers/contracts-provider";
 import { useSelectShop } from "@/providers/select-shop-provider";
 import { Product, Purchase } from "@/types";
 import { Address, Avatar, Identity, Name } from "@coinbase/onchainkit/identity";
@@ -93,6 +94,7 @@ const enum Filter {
 
 export function OrdersDashboard() {
   const { shop, shopContract } = useSelectShop();
+  const { publicClient } = useContracts();
   const [orders, setOrders] = useState<Purchase[]>([]);
   const [products, setProducts] = useState<{ [key: number]: Product }>([]);
   const [sort, setSort] = useState<Sort>(Sort.ProductIDAsc);
@@ -217,12 +219,48 @@ export function OrdersDashboard() {
         getOrders();
       }
     } else {
+      getOrders();
       const filteredOrders = orders.filter(
         (order) => getOrderStatus(order) === filter,
       );
       setOrders(filteredOrders);
     }
   }, [shop, filter]);
+
+  const claimEarnings = async (purchase: Purchase) => {
+    try {
+      toast({
+        title: "Processing",
+        description: `Claiming earnings for purchase ID ${purchase.id}`,
+      });
+      const hash = await shopContract.write.claimEarnings([purchase.id]);
+      toast({
+        title: "Processing",
+        description: `Waiting for transaction receipt, hash: ${hash}`,
+      });
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash,
+      });
+      if (receipt.status !== "success") {
+        throw new Error("Transaction failed, hash: " + hash);
+      }
+      toast({
+        title: "Success",
+        description: `Claimed ${formatEther(
+          BigInt(purchase.sellerAmount),
+        )} ETH!`,
+      });
+      await getOrders();
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: "Error claiming earnings",
+        description:
+          error.message || "An error occurred while claiming earnings.",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (!shop) {
     return (
@@ -437,7 +475,6 @@ export function OrdersDashboard() {
                               </Tooltip>
                             </TooltipProvider>
                           </TableCell>
-
                           <TableCell className="hidden sm:table-cell">
                             <Badge className="text-xs" variant="secondary">
                               {getOrderStatus(order)}
@@ -462,7 +499,10 @@ export function OrdersDashboard() {
                           </TableCell>
                           <TableCell className="hidden text-center sm:table-cell">
                             {canClaimEarnings(order) ? (
-                              <CheckCircle className="inline h-4 w-4 text-primary" />
+                              <CheckCircle
+                                className="inline h-4 w-4 text-primary hover:cursor-pointer"
+                                onClick={() => claimEarnings(order)}
+                              />
                             ) : (
                               <XCircle className="inline h-4 w-4 text-destructive" />
                             )}

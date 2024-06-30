@@ -32,11 +32,7 @@ export function ShopsPage() {
         }
         const formattedShops = await Promise.all(
           shops.map(async (shop: any) => {
-            const shopMetadataURI = shop.shopMetadataURI;
-            const shopMetadata = await getShopMetadata({
-              shopAddress: shop.shopAddress,
-              shopMetadataURI,
-            });
+            const shopMetadata = await getShopMetadata(shop);
             return shopMetadata;
           }),
         );
