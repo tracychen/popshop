@@ -4,6 +4,6 @@
 module.exports = {
   reactStrictMode: false,
   images: {
-    domains: ["ipfs.io", "emerald-skilled-cat-398.mypinata.cloud"],
+    domains: ["ipfs.io", process.env.NEXT_PUBLIC_GATEWAY_URL],
   },
 };
