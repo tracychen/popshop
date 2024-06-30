@@ -31,7 +31,7 @@ export function ShopNav({ children }: { children: React.ReactNode }) {
             popshop*
           </Link>
           <Link
-            href="#"
+            href="/shops"
             className="text-foreground transition-colors hover:text-foreground"
           >
             Shops
@@ -57,7 +57,7 @@ export function ShopNav({ children }: { children: React.ReactNode }) {
                 <Flower className="h-6 w-6" weight="fill" />
                 <span className="sr-only">popshop*</span>
               </Link>
-              <Link href="#" className="hover:text-foreground">
+              <Link href="/shops" className="hover:text-foreground">
                 Shops
               </Link>
             </nav>

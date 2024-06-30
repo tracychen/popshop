@@ -57,7 +57,6 @@ export function ProductsTab({
       toast({
         title: "Processing",
         description: `Waiting for transaction receipt, hash: ${hash}`,
-        // action:
       });
       const receipt = await publicClient.waitForTransactionReceipt({
         hash,

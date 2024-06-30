@@ -1,7 +1,7 @@
 "use client";
 import { ArrowDown, ArrowUp, Funnel, PlusCircle } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { formatEther } from "viem";
 
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSelectShop } from "@/providers/select-shop-provider";
 import { Product } from "@/types";
 
+import { getProductMetadata } from "@/lib/metadata";
 import { toast } from "../ui/use-toast";
 import { ProductsTab } from "./products-tab";
 
@@ -56,17 +57,6 @@ export function ProductsDashboard() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [sort, setSort] = useState<Sort>(Sort.IDAsc);
-
-  const getProductMetadata = useCallback(
-    async (product: { metadataURI: string }) => {
-      const res = await fetch(
-        `https://gateway.pinata.cloud/ipfs/${product.metadataURI}`,
-      );
-      const metadata = await res.json();
-      return metadata;
-    },
-    [],
-  );
 
   const getProducts = async () => {
     setLoading(true);
@@ -113,7 +103,7 @@ export function ProductsDashboard() {
     if (shop) {
       getProducts();
     }
-  }, [shop, shopContract, getProductMetadata]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [shop, shopContract]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!shop) {
     return (

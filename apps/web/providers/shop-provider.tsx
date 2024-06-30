@@ -14,12 +14,15 @@ import { chain } from "@/lib/chain";
 import { contracts } from "@/lib/contracts";
 import { Shop } from "@/types";
 
-import { getShopMetadata } from "@/lib/metadata";
 import { useToast } from "../components/ui/use-toast";
 import { useContracts } from "./contracts-provider";
 
-const SelectShopContext = createContext(
+const ShopContext = createContext(
   {} as {
+    getShopMetadata: (shop: {
+      shopMetadataURI: string;
+      shopAddress: string;
+    }) => Promise<Shop>;
     refreshShop: (shopAddress: string) => void;
     shopContract: any;
     shops: Shop[];
@@ -30,11 +33,7 @@ const SelectShopContext = createContext(
   },
 );
 
-export const SelectShopProvider = ({
-  children,
-}: {
-  children?: React.ReactNode;
-}) => {
+export const ShopProvider = ({ children }: { children?: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [shop, setShop] = useState<Shop>();
   const [shops, setShops] = useState<Shop[]>([]);
@@ -69,6 +68,21 @@ export const SelectShopProvider = ({
     });
   }, [shop]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const getShopMetadata = useCallback(
+    async (shop: { shopMetadataURI: string; shopAddress: string }) => {
+      console.log(shop);
+      const res = await fetch(
+        `https://gateway.pinata.cloud/ipfs/${shop.shopMetadataURI}`,
+      );
+      const metadata = await res.json();
+      return {
+        ...metadata,
+        shopAddress: shop.shopAddress,
+      };
+    },
+    [],
+  );
+
   const getShops = useCallback(
     async (wallet: ConnectedWallet) => {
       setLoading(true);
@@ -96,7 +110,7 @@ export const SelectShopProvider = ({
       }
       setLoading(false);
     },
-    [shopRegistryContract],
+    [shopRegistryContract, getShopMetadata],
   );
 
   const refreshShop = async (shopAddress: string) => {
@@ -137,8 +151,9 @@ export const SelectShopProvider = ({
   }, [ready, wallets]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <SelectShopContext.Provider
+    <ShopContext.Provider
       value={{
+        getShopMetadata,
         refreshShop,
         shopContract,
         shops,
@@ -149,8 +164,8 @@ export const SelectShopProvider = ({
       }}
     >
       {children}
-    </SelectShopContext.Provider>
+    </ShopContext.Provider>
   );
 };
 
-export const useSelectShop = () => useContext(SelectShopContext);
+export const useShop = () => useContext(ShopContext);

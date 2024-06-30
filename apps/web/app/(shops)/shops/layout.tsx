@@ -1,14 +1,3 @@
-const sidebarNavItems = [
-  {
-    title: "Account",
-    href: "/shops",
-  },
-  {
-    title: "Display",
-    href: "/shops#display",
-  },
-];
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>

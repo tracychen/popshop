@@ -120,14 +120,13 @@ export function OrdersDashboard() {
   };
 
   const canClaimEarnings = (order: Purchase) => {
-    if (order.completed) {
+    const hasUnclaimedEarnings = BigInt(order.sellerAmount) !== BigInt(0);
+    if (order.completed && hasUnclaimedEarnings) {
       return true;
     }
     const now = Math.floor(Date.now() / 1000);
-    if (now - order.purchaseTime > 60 * 60 * 24 * 7) {
-      return true;
-    }
-    if (BigInt(order.sellerAmount) !== BigInt(0)) {
+    const pastChallengePeriod = now - order.purchaseTime > 60 * 60 * 24 * 7;
+    if (pastChallengePeriod && hasUnclaimedEarnings) {
       return true;
     }
     return false;

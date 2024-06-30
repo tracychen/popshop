@@ -16,7 +16,7 @@ export type Shop = {
   shopAddress: string;
   name: string;
   description: string;
-  image: string;
+  imageUrl: string;
 };
 
 export type Purchase = {

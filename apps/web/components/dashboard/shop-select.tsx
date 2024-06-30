@@ -10,7 +10,7 @@ import {
 import { useSelectShop } from "@/providers/select-shop-provider";
 
 export function ShopSelect() {
-  const { shop, shops, setShop, loading } = useSelectShop();
+  const { shops, setShop, loading } = useSelectShop();
 
   return (
     <>

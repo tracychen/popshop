@@ -4,7 +4,7 @@ import { useWallets } from "@privy-io/react-auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatEther, getContract } from "viem";
 
 import { Icons } from "@/components/icons";
@@ -24,6 +24,7 @@ import { contracts } from "@/lib/contracts";
 import { useContracts } from "@/providers/contracts-provider";
 import { Product } from "@/types";
 
+import { getProductMetadata, getShopMetadata } from "@/lib/metadata";
 import { BecomeReferrerCard } from "./become-referrer-card";
 import { BuyProductForm } from "./buy-product-form";
 import { ProductStrategiesCard } from "./product-strategies-card";
@@ -44,27 +45,6 @@ export function ProductPage({
   const { publicClient, shopRegistryContract } = useContracts();
   const [shopContract, setShopContract] = useState<any>();
   const [shopMetadata, setShopMetadata] = useState();
-
-  const getProductMetadata = useCallback(async (metadataURI: string) => {
-    const res = await fetch(`https://gateway.pinata.cloud/ipfs/${metadataURI}`);
-    const metadata = await res.json();
-    console.log({ metadata });
-    return metadata;
-  }, []);
-
-  const getShopMetadata = useCallback(
-    async (shop: { shopMetadataURI: string; shopAddress: string }) => {
-      const res = await fetch(
-        `https://gateway.pinata.cloud/ipfs/${shop.shopMetadataURI}`,
-      );
-      const metadata = await res.json();
-      return {
-        ...metadata,
-        shopAddress: shop.shopAddress,
-      };
-    },
-    [],
-  );
 
   useEffect(() => {
     const getShopContract = async () => {
@@ -109,18 +89,7 @@ export function ProductPage({
         totalSold,
       ] = await shopContract.read.products([productId]);
 
-      console.log({
-        id,
-        metadataURI,
-        supply,
-        price,
-        discountStrategy,
-        feeShareStrategy,
-        rewardStrategy,
-        paused,
-        totalSold,
-      });
-      const metadata = await getProductMetadata(metadataURI);
+      const metadata = await getProductMetadata({ metadataURI });
 
       const formattedProduct = {
         id: id,
@@ -183,7 +152,7 @@ export function ProductPage({
             </Badge>
           ) : (
             <Badge variant="destructive" className="ml-auto sm:ml-0">
-              Out of stock
+              Sold out
             </Badge>
           ))}
         {!loading && !product?.active && (
