@@ -47,12 +47,13 @@ export function ProductStrategiesCard({
     if (product?.discountStrategy) {
       // @ts-ignore
       const strategy = getContract({
-        address: product.discountStrategy,
+        address: product.discountStrategy as `0x${string}`,
         abi: contracts.IDiscountStrategy.abi,
         client: {
           public: publicClient,
         },
       });
+      // @ts-ignore
       const type = await strategy.read.getType();
       setDiscountStrategy({
         address: product.discountStrategy,
@@ -68,12 +69,13 @@ export function ProductStrategiesCard({
     if (product?.rewardStrategy) {
       // @ts-ignore
       const strategy = getContract({
-        address: product.rewardStrategy,
+        address: product.rewardStrategy as `0x${string}`,
         abi: contracts.IRewardStrategy.abi,
         client: {
           public: publicClient,
         },
       });
+      // @ts-ignore
       const type = await strategy.read.getType();
       setRewardStrategy({
         address: product.rewardStrategy,
@@ -89,12 +91,13 @@ export function ProductStrategiesCard({
     if (product?.feeShareStrategy) {
       // @ts-ignore
       const strategy = getContract({
-        address: product.feeShareStrategy,
+        address: product.feeShareStrategy as `0x${string}`,
         abi: contracts.IFeeShareStrategy.abi,
         client: {
           public: publicClient,
         },
       });
+      // @ts-ignore
       const type = await strategy.read.getType();
       setFeeShareStrategy({
         address: product.feeShareStrategy,

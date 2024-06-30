@@ -73,6 +73,7 @@ export function RewardStrategies() {
       });
       let variables = {};
       let actions: ActionDialogTab[] = [];
+      // @ts-ignore
       const type = await contract.read.getType();
 
       // @ts-ignore
@@ -87,6 +88,7 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const tokenAddress = await strategyContract.read.shopToken();
           // @ts-ignore
           const tokenContract = getContract({
@@ -97,16 +99,20 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const symbol = await tokenContract.read.symbol();
+          // @ts-ignore
           const decimals = await tokenContract.read.decimals();
           variables = {
             ["Token"]: symbol,
             ["Token Address"]: tokenAddress,
             ["Reward Per Purchase"]: `${formatUnits(
+              // @ts-ignore
               await strategyContract.read.numTokens(),
               decimals,
             )} ${symbol}`,
             ["Remaining Reward Supply"]: `${formatUnits(
+              // @ts-ignore
               await tokenContract.read.balanceOf([rewardStrategyAddress]),
               decimals,
             )} ${symbol}`,
@@ -146,6 +152,7 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const tokenAddress = await strategyContract.read.shopToken();
           // @ts-ignore
           const tokenContract = getContract({
@@ -156,13 +163,17 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const symbol = await tokenContract.read.symbol();
+          // @ts-ignore
           const decimals = await tokenContract.read.decimals();
           variables = {
             ["Token"]: symbol,
             ["Token Address"]: tokenAddress,
+            // @ts-ignore
             ["Purchase Price Multiplier"]: `${await strategyContract.read.multiplier()}`,
             ["Remaining Reward Supply"]: `${formatUnits(
+              // @ts-ignore
               await tokenContract.read.balanceOf([rewardStrategyAddress]),
               decimals,
             )} ${symbol}`,
@@ -202,6 +213,7 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const tokenAddress = await strategyContract.read.shopToken();
           // @ts-ignore
           const tokenContract = getContract({
@@ -212,14 +224,19 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const symbol = await tokenContract.read.symbol();
+          // @ts-ignore
           const decimals = await tokenContract.read.decimals();
           variables = {
             ["Token"]: symbol,
             ["Token Address"]: tokenAddress,
+            // @ts-ignore
             ["Decay Constant"]: `${await strategyContract.read.decayConstant()}`,
+            // @ts-ignore
             ["Base Reward Multiplier"]: `${await strategyContract.read.baseReward()}`,
             ["Remaining Reward Supply"]: `${formatUnits(
+              // @ts-ignore
               await tokenContract.read.balanceOf([rewardStrategyAddress]),
               decimals,
             )} ${symbol}`,
@@ -227,7 +244,9 @@ export function RewardStrategies() {
           actions = [
             getUpdateBondingCurveAction({
               strategyContract,
+              // @ts-ignore
               initialBaseReward: await strategyContract.read.baseReward(),
+              // @ts-ignore
               initialDecayConstant: await strategyContract.read.decayConstant(),
               refresh: getRewardStrategies,
             }),
@@ -259,6 +278,7 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const tokenAddress = await strategyContract.read.shopToken();
           // @ts-ignore
           const tokenContract = getContract({
@@ -269,17 +289,22 @@ export function RewardStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const symbol = await tokenContract.read.symbol();
+          // @ts-ignore
           const decimals = await tokenContract.read.decimals();
           variables = {
             ["Token"]: symbol,
             ["Token Address"]: tokenAddress,
             ["Reward Per Purchase"]: `${formatUnits(
+              // @ts-ignore
               await strategyContract.read.numTokens(),
               decimals,
             )} ${symbol}`,
+            // @ts-ignore
             ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
             ["Remaining Reward Supply"]: `${formatUnits(
+              // @ts-ignore
               await tokenContract.read.balanceOf([rewardStrategyAddress]),
               decimals,
             )} ${symbol}`,

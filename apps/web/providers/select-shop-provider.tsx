@@ -50,7 +50,7 @@ export const SelectShopProvider = ({
     () =>
       // @ts-ignore
       getContract({
-        address: contracts.ShopRegistry.address,
+        address: contracts.ShopRegistry.address as `0x${string}`,
         abi: contracts.ShopRegistry.abi,
         client: {
           public: publicClient,
@@ -63,7 +63,7 @@ export const SelectShopProvider = ({
     if (!shop?.shopAddress) return;
     // @ts-ignore
     return getContract({
-      address: shop?.shopAddress,
+      address: shop?.shopAddress as `0x${string}`,
       abi: contracts.Shop.abi,
       client: {
         public: publicClient,
@@ -91,6 +91,7 @@ export const SelectShopProvider = ({
     async (wallet: ConnectedWallet) => {
       setLoading(true);
       try {
+        // @ts-ignore
         const myShops = await shopRegistryContract.read.getShopsByAdmin([
           wallet.address,
         ]);
@@ -107,7 +108,7 @@ export const SelectShopProvider = ({
           ),
         );
         console.log(shopMetadata);
-        setShops(shopMetadata.filter((shop) => shop !== undefined));
+        setShops(shopMetadata.filter((shop: any) => shop !== undefined));
       } catch (error) {
         console.error(error);
       }
@@ -126,7 +127,7 @@ export const SelectShopProvider = ({
 
       // @ts-ignore
       const shopRegistryContract = getContract({
-        address: contracts.ShopRegistry.address,
+        address: contracts.ShopRegistry.address as `0x${string}`,
         abi: contracts.ShopRegistry.abi,
         client: {
           public: publicClient,
@@ -136,7 +137,7 @@ export const SelectShopProvider = ({
       const shopInfo = await shopRegistryContract.read.getShop([shopAddress]);
       console.log(shopInfo);
 
-      setShop(await getShopMetadata(shopInfo));
+      setShop(await getShopMetadata(shopInfo as any));
     } catch (e) {
       console.error("Error refreshing shop data", e);
       toast({

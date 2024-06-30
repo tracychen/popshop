@@ -156,7 +156,6 @@ export function AddProductForm() {
         await shopContract.read.getFeeShareStrategies();
       const transformedStrategies = [];
       for (const strategyAddress of feeShareStrategies) {
-        // @ts-ignore
         const contract = getContract({
           address: strategyAddress,
           abi: contracts.IFeeShareStrategy.abi,
@@ -164,6 +163,7 @@ export function AddProductForm() {
             public: publicClient,
           },
         });
+        // @ts-ignore
         const type = await contract.read.getType();
         transformedStrategies.push({
           address: strategyAddress,
@@ -183,7 +183,6 @@ export function AddProductForm() {
         await shopContract.read.getDiscountStrategies();
       const transformedStrategies = [];
       for (const strategyAddress of discountStrategies) {
-        // @ts-ignore
         const contract = getContract({
           address: strategyAddress,
           abi: contracts.IDiscountStrategy.abi,
@@ -191,6 +190,7 @@ export function AddProductForm() {
             public: publicClient,
           },
         });
+        // @ts-ignore
         const type = await contract.read.getType();
         transformedStrategies.push({
           address: strategyAddress,
@@ -217,6 +217,7 @@ export function AddProductForm() {
             public: publicClient,
           },
         });
+        // @ts-ignore
         const type = await contract.read.getType();
         transformedStrategies.push({
           address: strategyAddress,

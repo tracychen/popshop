@@ -155,6 +155,7 @@ export function CreateRewardStrategyForm({
       abi: contracts[selectedStrategyType].abi,
       account: wallets[0].address as `0x${string}`,
       args: args,
+      // @ts-ignore
       bytecode: contracts[selectedStrategyType].bytecode,
     });
 

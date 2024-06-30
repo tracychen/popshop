@@ -73,6 +73,7 @@ export function FeeShareStrategies() {
       });
       let variables = {};
       let actions: ActionDialogTab[] = [];
+      // @ts-ignore
       const type = await contract.read.getType();
 
       // @ts-ignore
@@ -89,11 +90,13 @@ export function FeeShareStrategies() {
           });
           variables = {
             ["Fee Share Percentage"]: `${
+              // @ts-ignore
               Number(await strategyContract.read.bps()) / 100
             }%`,
           };
           actions = [
             getUpdatePercentageAction({
+              // @ts-ignore
               initalBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getFeeShareStrategies,
@@ -114,14 +117,17 @@ export function FeeShareStrategies() {
           });
           variables = {
             ["Fee Share Percentage"]: `${
+              // @ts-ignore
               Number(await strategyContract.read.bps()) / 100
             }%`,
             ["Start Time"]: new Date(
+              // @ts-ignore
               Number(await strategyContract.read.startTimestamp()) * 1000,
             ).toLocaleString(undefined, {
               timeZoneName: "short",
             }),
             ["End Time"]: new Date(
+              // @ts-ignore
               Number(await strategyContract.read.endTimestamp()) * 1000,
             ).toLocaleString(undefined, {
               timeZoneName: "short",
@@ -129,13 +135,16 @@ export function FeeShareStrategies() {
           };
           actions = [
             getUpdatePercentageAction({
+              // @ts-ignore
               initalBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getFeeShareStrategies,
             }),
             getUpdateTimeframeAction({
               initialStartTimestamp:
+                // @ts-ignore
                 await strategyContract.read.startTimestamp(),
+              // @ts-ignore
               initialEndTimestamp: await strategyContract.read.endTimestamp(),
               strategyContract,
               refresh: getFeeShareStrategies,
@@ -156,12 +165,15 @@ export function FeeShareStrategies() {
           });
           variables = {
             ["Fee Share Percentage"]: `${
+              // @ts-ignore
               Number(await strategyContract.read.bps()) / 100
             }%`,
+            // @ts-ignore
             ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
           };
           actions = [
             getUpdatePercentageAction({
+              // @ts-ignore
               initalBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getFeeShareStrategies,

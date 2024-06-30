@@ -179,7 +179,7 @@ export function CreateShopForm({ children }: { children: React.ReactNode }) {
 
     // @ts-ignore
     const shopFactoryContract = getContract({
-      address: contracts.ShopFactory.address,
+      address: contracts.ShopFactory.address as `0x${string}`,
       abi: contracts.ShopFactory.abi,
       client: {
         wallet: walletClient,

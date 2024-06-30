@@ -5,9 +5,6 @@ module.exports = {
       rootDir: ["apps/*/", "packages/*/"],
     },
   },
-  rules: {
-    "@next/next/no-html-link-for-pages": "off",
-  },
   parserOptions: {
     babelOptions: {
       presets: [require.resolve("next/babel")],
@@ -15,6 +12,7 @@ module.exports = {
   },
   plugins: ["simple-import-sort", "import"],
   rules: {
+    "@next/next/no-html-link-for-pages": "off",
     "simple-import-sort/imports": "warn",
     "simple-import-sort/exports": "warn",
     "import/first": "warn",

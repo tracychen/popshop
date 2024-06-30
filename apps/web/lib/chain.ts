@@ -1,4 +1,4 @@
-import { anvil, base, baseSepolia } from "viem/chains";
+import { anvil, base, baseSepolia, Chain } from "viem/chains";
 
 function getChain() {
   const env = process.env.NEXT_PUBLIC_VERCEL_ENV;
@@ -11,4 +11,4 @@ function getChain() {
   }
 }
 
-export const chain = getChain();
+export const chain: Chain = getChain();

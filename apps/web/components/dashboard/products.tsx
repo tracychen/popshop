@@ -79,7 +79,6 @@ export function ProductsDashboard() {
     try {
       const products = await shopContract.read.getProducts();
 
-      console.log(products);
       const formattedProducts = await Promise.all(
         products.map(async (product: any) => {
           const metadata = await getProductMetadata(product);

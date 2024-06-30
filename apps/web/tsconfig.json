@@ -2,6 +2,7 @@
   "extends": "@popshop/tsconfig/nextjs.json",
   "compilerOptions": {
     "strict": true,
+    "strictNullChecks": true,
     "jsx": "preserve",
     "plugins": [
       {

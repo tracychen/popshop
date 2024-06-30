@@ -51,7 +51,6 @@ export function BuyProductForm({
   const { ready, user } = usePrivy();
   const [isSaving, setIsSaving] = useState(false);
   const { walletClient, publicClient } = useContracts();
-  const [totalPrice, setTotalPrice] = useState(0);
   const [discount, setDiscount] = useState<{
     percentage: number;
     amount: number;
@@ -95,20 +94,21 @@ export function BuyProductForm({
   }, [product, count, discount]);
 
   const getDiscount = async (product: Product) => {
-    console.log(walletClient.account);
+    console.log(walletClient!.account);
 
     // @ts-ignore
     const strategyContract = getContract({
-      address: product.discountStrategy,
+      address: product.discountStrategy as `0x${string}`,
       abi: contracts.IDiscountStrategy.abi,
       client: {
         public: publicClient,
         wallet: walletClient,
       },
     });
+    // @ts-ignore
     const discountAmount = await strategyContract.read.calculateDiscount([
       parseEther(String(totalPriceBeforeDiscount)),
-      walletClient.account.address,
+      walletClient!.account!.address,
     ]);
     const amountInEther = Number(formatEther(discountAmount));
     const percentage =
@@ -158,7 +158,7 @@ export function BuyProductForm({
       });
       // @ts-ignore
       const shopContract = getContract({
-        address: shopAddress,
+        address: shopAddress as `0x${string}`,
         abi: contracts.Shop.abi,
         client: {
           public: publicClient,
@@ -169,6 +169,7 @@ export function BuyProductForm({
       await walletClient.switchChain({ id: chain.id });
       const referrerAddress =
         referrer && isAddress(referrer) ? referrer : zeroAddress;
+      // @ts-ignore
       const hash = await shopContract.write.purchaseProduct({
         args: [product!.id, data.count, referrerAddress],
         value: parseEther(totalPriceAfterDiscount),

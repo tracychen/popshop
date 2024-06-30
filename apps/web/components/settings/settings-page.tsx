@@ -2,8 +2,6 @@
 import { usePrivy } from "@privy-io/react-auth";
 import { redirect } from "next/navigation";
 
-import { SettingsForm } from "./settings-form";
-
 export default function SettingsPage() {
   const { ready, user } = usePrivy();
 
@@ -12,9 +10,6 @@ export default function SettingsPage() {
   }
 
   return (
-    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-      {/* todo add and remove admins */}
-      <SettingsForm user={user} />
-    </main>
+    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8"></main>
   );
 }

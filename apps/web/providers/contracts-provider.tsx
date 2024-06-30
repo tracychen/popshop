@@ -7,6 +7,7 @@ import {
   custom,
   getContract,
   http,
+  WalletClient,
 } from "viem";
 
 import { chain } from "@/lib/chain";
@@ -15,7 +16,7 @@ import { contracts } from "@/lib/contracts";
 const ContractsContext = createContext(
   {} as {
     publicClient: any;
-    walletClient: any;
+    walletClient?: WalletClient;
     shopRegistryContract: any;
     loading: boolean;
   },
@@ -29,7 +30,7 @@ export const ContractsProvider = ({
   const [loading, setLoading] = useState(true);
 
   const { wallets } = useWallets();
-  const [walletClient, setWalletClient] = useState<any>();
+  const [walletClient, setWalletClient] = useState<WalletClient>();
 
   const publicClient = useMemo(
     () =>
@@ -59,7 +60,7 @@ export const ContractsProvider = ({
   const shopRegistryContract = useMemo(() => {
     // @ts-ignore
     return getContract({
-      address: contracts.ShopRegistry.address,
+      address: contracts.ShopRegistry.address as `0x${string}`,
       abi: contracts.ShopRegistry.abi,
       client: {
         public: publicClient,

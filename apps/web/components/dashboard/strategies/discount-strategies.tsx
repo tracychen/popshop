@@ -75,6 +75,7 @@ export function DiscountStrategies() {
       });
       let variables = {};
       let actions: ActionDialogTab[] = [];
+      // @ts-ignore
       const type = await contract.read.getType();
 
       // @ts-ignore
@@ -89,6 +90,7 @@ export function DiscountStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const tokenAddress = await strategyContract.read.shopToken();
           // @ts-ignore
           const tokenContract = getContract({
@@ -99,21 +101,27 @@ export function DiscountStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const symbol = await tokenContract.read.symbol();
+          // @ts-ignore
           const decimals = await tokenContract.read.decimals();
           variables = {
             ["Token"]: symbol,
             ["Token Address"]: tokenAddress,
             ["Min. Balance For Discount"]: `${formatUnits(
+              // @ts-ignore
               await strategyContract.read.minBalance(),
               decimals,
             )} ${symbol}`,
+
             ["Percentage Discount"]: `${
+              // @ts-ignore
               Number(await strategyContract.read.bps()) / 100
             }%`,
           };
           actions = [
             getUpdatePercentageAction({
+              // @ts-ignore
               initalBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getDiscountStrategies,
@@ -137,16 +145,20 @@ export function DiscountStrategies() {
               wallet: walletClient,
             },
           });
+          // @ts-ignore
           const tokenAddress = await strategyContract.read.shopToken();
           variables = {
             ["ERC721 Address"]: tokenAddress,
+            // @ts-ignore
             ["Min. Balance For Discount"]: `${await strategyContract.read.minBalance()}`,
             ["Percentage Discount"]: `${
+              // @ts-ignore
               Number(await strategyContract.read.bps()) / 100
             }%`,
           };
           actions = [
             getUpdatePercentageAction({
+              // @ts-ignore
               initalBps: await strategyContract.read.bps(),
               strategyContract,
               refresh: getDiscountStrategies,
@@ -173,6 +185,7 @@ export function DiscountStrategies() {
             },
           });
           variables = {
+            // @ts-ignore
             ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
           };
           actions = [
