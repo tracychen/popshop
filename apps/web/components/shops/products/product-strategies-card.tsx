@@ -158,11 +158,20 @@ export function ProductStrategiesCard({
                 Strategy
               </Label>
               <div className="text-sm text-muted-foreground">
-                {discountStrategy
-                  ? discountStrategyTypeInfo[discountStrategy.type].description
-                  : "None"}{" "}
-                Any discounts that are eligible for you will be calculated and
-                displayed in the purchase section.
+                {discountStrategy ? (
+                  <div className="grid gap-3">
+                    {`${
+                      discountStrategyTypeInfo[discountStrategy.type]
+                        .description
+                    } Any discounts that are eligible for you will be calculated
+                    and displayed in the purchase section.`}
+                    <div className="truncate">
+                      Contract: {discountStrategy.address}
+                    </div>
+                  </div>
+                ) : (
+                  "None"
+                )}
               </div>
             </div>
           )}
@@ -177,10 +186,19 @@ export function ProductStrategiesCard({
                 <Gift className="mr-1 inline h-4 w-4" /> Reward Strategy
               </Label>
               <div className="text-sm text-muted-foreground">
-                {rewardStrategy
-                  ? rewardStrategyTypeInfo[rewardStrategy.type].description
-                  : "None"}{" "}
-                These are automatically issued at the time of purchase.
+                {rewardStrategy ? (
+                  <div className="grid gap-3">
+                    {`${
+                      rewardStrategyTypeInfo[rewardStrategy.type].description
+                    } These are automatically issued at the time of
+                    purchase.`}
+                    <div className="truncate">
+                      Contract: {rewardStrategy.address}
+                    </div>
+                  </div>
+                ) : (
+                  "None"
+                )}
               </div>
             </div>
           )}
@@ -195,9 +213,20 @@ export function ProductStrategiesCard({
                 <HandCoins className="mr-1 inline h-4 w-4" /> Fee Share Strategy
               </Label>
               <div className="text-sm text-muted-foreground">
-                {feeShareStrategy
-                  ? feeShareStrategyTypeInfo[feeShareStrategy.type].description
-                  : "None"}
+                {feeShareStrategy ? (
+                  <div className="grid gap-3">
+                    {`${
+                      feeShareStrategyTypeInfo[feeShareStrategy.type]
+                        .description
+                    } These are automatically issued at the time of
+                  purchase.`}
+                    <div className="truncate">
+                      Contract: {feeShareStrategy.address}
+                    </div>
+                  </div>
+                ) : (
+                  "None"
+                )}
               </div>
             </div>
           )}
