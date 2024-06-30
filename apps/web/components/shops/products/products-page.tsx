@@ -128,7 +128,7 @@ export function ProductsPage({ shopAddress }: { shopAddress: string }) {
       {loading ? (
         <Skeleton className="h-96 w-full" />
       ) : (
-        <div className="mx-auto grid grid-cols-1 gap-6 sm:grid-cols-3 md:w-2/3 lg:grid-cols-4">
+        <div className="mx-auto grid grid-cols-1 gap-6 sm:grid-cols-3 lg:w-2/3 xl:grid-cols-4">
           {products
             .filter((product) => product.active)
             .map((product) => (
@@ -152,13 +152,13 @@ export function ProductsPage({ shopAddress }: { shopAddress: string }) {
                   {product.supply <= 0 && (
                     <Badge
                       variant="secondary"
-                      className="absolute right-1 top-1"
+                      className="absolute right-2 top-2"
                     >
                       Sold out
                     </Badge>
                   )}
                 </div>
-                <h2 className="text-xl font-bold">{product.name}</h2>
+                <h2 className="text-lg font-bold md:text-xl">{product.name}</h2>
                 <p className="text-sm">{product.price} ETH</p>
               </Link>
             ))}

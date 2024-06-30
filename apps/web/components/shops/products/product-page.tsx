@@ -1,5 +1,5 @@
 "use client";
-import { CaretLeft, XLogo } from "@phosphor-icons/react";
+import { XLogo } from "@phosphor-icons/react";
 import { useWallets } from "@privy-io/react-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,6 +25,7 @@ import { useContracts } from "@/providers/contracts-provider";
 import { Product } from "@/types";
 
 import { getProductMetadata, getShopMetadata } from "@/lib/metadata";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { BecomeReferrerCard } from "./become-referrer-card";
 import { BuyProductForm } from "./buy-product-form";
 import { ProductStrategiesCard } from "./product-strategies-card";
@@ -134,10 +135,12 @@ export function ProductPage({
   return (
     <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" className="h-7 w-7">
-          <CaretLeft className="h-4 w-4" />
-          <span className="sr-only">Back</span>
-        </Button>
+        <Link href={`/shops/${shopAddress}/products`}>
+          <Button variant="outline" size="icon" className="h-7 w-7">
+            <ArrowLeftIcon className="h-4 w-4" />
+            <span className="sr-only">Back</span>
+          </Button>
+        </Link>
         {loading ? (
           <Skeleton className="h-8 w-32" />
         ) : (
@@ -147,7 +150,7 @@ export function ProductPage({
         )}
         {!loading &&
           (product?.supply ? (
-            <Badge variant="outline" className="ml-auto sm:ml-0">
+            <Badge variant="outline" className="ml-auto bg-background sm:ml-0">
               In stock
             </Badge>
           ) : (
@@ -160,7 +163,7 @@ export function ProductPage({
             Inactive
           </Badge>
         )}
-        <div className="hidden items-center gap-2 md:ml-auto md:flex">
+        <div className="hidden items-center gap-3 md:ml-auto md:flex">
           <p className="text-xs text-muted-foreground">Share on</p>
           <Link
             href={`http://twitter.com/share?text=${encodeURIComponent(
@@ -256,7 +259,7 @@ export function ProductPage({
           </div>
         )}
       </div>
-      <div className="flex items-center justify-center gap-2 md:hidden">
+      <div className="flex items-center justify-center gap-3 md:hidden">
         <p className="text-xs text-muted-foreground">Share on</p>
         <Link
           href={`http://twitter.com/share?text=${encodeURIComponent(

@@ -47,17 +47,20 @@ export function ShopPage({ shopAddress }: { shopAddress: string }) {
     fetchShop();
   }, [shopAddress]);
   return (
-    <div className="h-screen w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+    <div className="h-screen w-full bg-secondary lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
-        <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-3 px-4 text-center">
+        <div className="mx-auto grid w-96 gap-6 px-4">
+          <div className="grid gap-3 text-center">
             {loading ? (
-              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-16 w-full" />
             ) : (
               <h1 className="text-3xl font-bold uppercase sm:text-6xl">
                 {shop?.name}
               </h1>
             )}
+            <p className="font-sniglet text-3xl text-primary sm:text-6xl">
+              * * *
+            </p>
             {loading ? (
               <Skeleton className="h-6 w-full" />
             ) : (
@@ -70,7 +73,7 @@ export function ShopPage({ shopAddress }: { shopAddress: string }) {
             ) : (
               <Link
                 href={`${chain.blockExplorers?.default.url}/address/${shop?.shopAddress}`}
-                className="mx-auto w-48 max-w-xs items-center text-sm text-muted-foreground underline sm:w-full"
+                className="w-full text-sm text-muted-foreground underline"
                 target="_blank"
               >
                 <p className="hidden sm:flex">{shop?.shopAddress}</p>
@@ -80,13 +83,15 @@ export function ShopPage({ shopAddress }: { shopAddress: string }) {
               </Link>
             )}
           </div>
-          <div className="grid gap-6">
-            <Link href={`/shops/${shopAddress}/products`}>
-              <Button className="w-full">
-                Enter <ArrowRight className="inline" />
-              </Button>{" "}
-            </Link>
-          </div>
+          {!loading && (
+            <div className="grid gap-6">
+              <Link href={`/shops/${shopAddress}/products`}>
+                <Button className="w-full">
+                  Enter <ArrowRight className="inline" />
+                </Button>{" "}
+              </Link>
+            </div>
+          )}
           <div className="mt-4 text-center text-sm">
             Create your own popshop*{" "}
             <Link href="/dashboard" className="underline">
@@ -95,7 +100,7 @@ export function ShopPage({ shopAddress }: { shopAddress: string }) {
           </div>
         </div>
       </div>
-      <div className="hidden bg-muted lg:block">
+      <div className="">
         {loading ? (
           <Skeleton className="h-full w-full" />
         ) : (
