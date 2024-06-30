@@ -54,11 +54,11 @@ export const feeShareStrategyTypeInfo = {
 
 export enum DiscountStrategyType {
   ALLOWLIST_DISCOUNT = "ALLOWLIST_DISCOUNT",
+  EAS_ATTESTATION_DISCOUNT = "EAS_ATTESTATION_DISCOUNT",
   MIN_ERC20_DISCOUNT = "MIN_ERC20_DISCOUNT",
   MIN_ERC721_DISCOUNT = "MIN_ERC721_DISCOUNT",
-  TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT = "TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT",
-  TIMEFRAME_DISCOUNT = "TIMEFRAME_DISCOUNT",
-  EAS_ATTESTATION_DISCOUNT = "EAS_ATTESTATION_DISCOUNT",
+  // TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT = "TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT",
+  // TIMEFRAME_DISCOUNT = "TIMEFRAME_DISCOUNT",
 }
 
 export const discountStrategyTypeInfo = {
@@ -82,14 +82,14 @@ export const discountStrategyTypeInfo = {
     description:
       "Discount for buyers that hold a minimum amount of an ERC721 tokens",
   },
-  [DiscountStrategyType.TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT]: {
-    name: "Token ID Allowlist ERC1155",
-    description:
-      "Discount for buyers that hold a specific ERC1155 token ID. Eligible token IDs can be set after creating the strategy. Different discounts can be set for each token ID.",
-  },
-  [DiscountStrategyType.TIMEFRAME_DISCOUNT]: {
-    name: "Time Frame",
-    description:
-      "Discount for buyers that purchase within a specific timeframe.",
-  },
+  // [DiscountStrategyType.TOKEN_ID_ALLOWLIST_ERC1155_DISCOUNT]: {
+  //   name: "Token ID Allowlist ERC1155",
+  //   description:
+  //     "Discount for buyers that hold a specific ERC1155 token ID. Eligible token IDs can be set after creating the strategy. Different discounts can be set for each token ID.",
+  // },
+  // [DiscountStrategyType.TIMEFRAME_DISCOUNT]: {
+  //   name: "Time Frame",
+  //   description:
+  //     "Discount for buyers that purchase within a specific timeframe.",
+  // },
 };
