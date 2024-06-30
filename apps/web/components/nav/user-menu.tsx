@@ -8,6 +8,7 @@ import {
   Name,
 } from "@coinbase/onchainkit/identity";
 import {
+  ArrowRight,
   Confetti,
   ShoppingCart,
   Storefront,
@@ -28,7 +29,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/use-toast";
+import { chain } from "@/lib/chain";
 import { coinbaseVerifiedAccountSchema } from "@/lib/eas";
+import Link from "next/link";
 import { Icons } from "../icons";
 
 export function UserMenu({
@@ -110,6 +113,19 @@ export function UserMenu({
             <Question className="mr-2 h-4 w-4" weight="fill" />
             Support
           </DropdownMenuItem> */}
+          <DropdownMenuItem>
+            {chain.testnet ? (
+              <Link href="https://popshop.fun/" target="_blank">
+                <ArrowRight className="mr-2 inline h-4 w-4" weight="fill" />
+                Try Mainnet
+              </Link>
+            ) : (
+              <Link href="https://sepolia.popshop.fun/" target="_blank">
+                <ArrowRight className="mr-2 inline h-4 w-4" weight="fill" />
+                Try Testnet
+              </Link>
+            )}
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem

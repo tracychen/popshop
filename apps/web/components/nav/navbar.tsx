@@ -16,7 +16,7 @@ export function Navbar() {
 
   return (
     <div className="absolute top-0 z-20 flex w-full items-center justify-between p-4 md:p-10">
-      <p className="text-xs text-muted">(in alpha)</p>
+      <p className="text-xs text-muted">(in pre-alpha)</p>
       <div className="ml-auto flex items-center space-x-4">
         <Button variant="secondary" onClick={() => router.push("/shops")}>
           Shop
