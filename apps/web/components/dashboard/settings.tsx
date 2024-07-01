@@ -28,7 +28,7 @@ export function SettingsDashboard() {
   }
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4">
         <ManageAdminsCard className="sm:col-span-2" />
         <SetPayoutAddressCard className="sm:col-span-2" />
       </div>
