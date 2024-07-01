@@ -72,7 +72,7 @@ export const contracts: {
     address: {
       [anvil.id]: "0x51d903DCc750Df34E1C44FEcaa0B5D8cCE407a0d",
       [baseSepolia.id]: "0x99bA579a714eda30F557a1C4825A241E062110F6",
-      [base.id]: "0x1234567890123456789012345678901234567890", // TODO
+      [base.id]: "0x9b73Ee8A25275282143e9e9b3Cf06d8fef3D88D4",
     }[chain.id],
     abi: ShopRegistryABI,
   },
@@ -80,7 +80,7 @@ export const contracts: {
     address: {
       [anvil.id]: "0xD8EdC95e9463Cfb4304C9a3DC84c7fb3872B3b07",
       [baseSepolia.id]: "0xE1a69392F39fBbCF3c712CCAdad503E79A249a01",
-      [base.id]: "0x1234567890123456789012345678901234567890", // TODO
+      [base.id]: "0x4EaDBF98e3209A0DCf0B674e34DA9FEFED30e25f",
     }[chain.id],
     abi: ShopFactoryABI,
   },
