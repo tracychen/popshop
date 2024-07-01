@@ -3,6 +3,7 @@ import { ShopNav } from "@/components/shops/shop-nav";
 export const metadata = {
   title: "popshop*",
   description: "incentivized social commerce",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || ""),
   openGraph: {
     title: "popshop*",
     description: "incentivized social commerce",
