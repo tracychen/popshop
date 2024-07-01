@@ -93,7 +93,7 @@ export function ShopsPage() {
                       alt="Image"
                       width={320}
                       height={320}
-                      className="aspect-square w-full rounded-md object-cover lg:aspect-auto lg:max-h-72"
+                      className="aspect-square w-full rounded-md object-cover dark:brightness-[0.2] dark:grayscale lg:aspect-auto lg:max-h-72"
                     />
                   </div>
                 </CardContent>

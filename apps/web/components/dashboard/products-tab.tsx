@@ -32,6 +32,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useContracts } from "@/providers/contracts-provider";
 import { useSelectShop } from "@/providers/select-shop-provider";
 import { Product } from "@/types";
+import { useRouter } from "next/navigation";
 
 export function ProductsTab({
   value,
@@ -46,6 +47,7 @@ export function ProductsTab({
 }) {
   const { shop, shopContract } = useSelectShop();
   const { publicClient } = useContracts();
+  const router = useRouter();
 
   const deactivateProduct = async (product: Product) => {
     try {
@@ -210,9 +212,13 @@ export function ProductsTab({
                             <ArrowSquareOut className="h-4 w-4" weight="fill" />
                           </Link>
                         </DropdownMenuItem>
-                        {/* <DropdownMenuItem>
-                              Edit <Badge variant="outline">Coming soon</Badge>
-                            </DropdownMenuItem> */}
+                        <DropdownMenuItem
+                          onClick={() => {
+                            router.push(`/dashboard/products/${product.id}`);
+                          }}
+                        >
+                          Edit
+                        </DropdownMenuItem>
                         {product.active ? (
                           <DropdownMenuItem
                             onClick={async () =>

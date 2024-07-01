@@ -125,9 +125,7 @@ export function ProductsPage({ shopAddress }: { shopAddress: string }) {
           </Link>
         )}
       </div>
-      {loading ? (
-        <Skeleton className="h-96 w-full" />
-      ) : (
+      {!loading && (
         <div className="mx-auto grid grid-cols-1 gap-6 sm:grid-cols-3 lg:w-2/3 xl:grid-cols-4">
           {products
             .filter((product) => product.active)
@@ -135,7 +133,7 @@ export function ProductsPage({ shopAddress }: { shopAddress: string }) {
               <Link
                 href={`/shops/${shopAddress}/products/${product.id}`}
                 key={product.id}
-                className="grid place-items-center gap-3 rounded-md transition-opacity hover:opacity-80"
+                className="grid place-items-start gap-3 rounded-md transition-opacity hover:opacity-80"
               >
                 <div className="relative inline-flex">
                   <Image
@@ -158,8 +156,12 @@ export function ProductsPage({ shopAddress }: { shopAddress: string }) {
                     </Badge>
                   )}
                 </div>
-                <h2 className="text-lg font-bold md:text-xl">{product.name}</h2>
-                <p className="text-sm">{product.price} ETH</p>
+                <div className="flex w-full flex-col items-center text-center">
+                  <h2 className="text-lg font-bold md:text-xl">
+                    {product.name}
+                  </h2>
+                  <p className="text-sm">{product.price} ETH</p>
+                </div>
               </Link>
             ))}
         </div>

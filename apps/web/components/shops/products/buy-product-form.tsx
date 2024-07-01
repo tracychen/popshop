@@ -120,10 +120,10 @@ export function BuyProductForm({
   };
 
   useEffect(() => {
-    if (product) {
+    if (product && walletClient?.account) {
       getDiscount(product);
     }
-  }, [product, count]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [product, count, walletClient]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!ready || !user) {
     return (
