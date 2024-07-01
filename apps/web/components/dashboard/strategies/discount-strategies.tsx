@@ -60,191 +60,205 @@ export function DiscountStrategies() {
   const { shopContract } = useSelectShop();
   const { publicClient, walletClient } = useContracts();
   const [strategies, setStrategies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const getDiscountStrategies = async () => {
-    const discountStrategies = await shopContract.read.getDiscountStrategies();
-    console.log({ discountStrategies });
-    const formattedStrategies = [];
-    for (const strategyAddress of discountStrategies) {
-      // @ts-ignore
-      const contract = getContract({
-        address: strategyAddress,
-        abi: contracts.IDiscountStrategy.abi,
-        client: {
-          public: publicClient,
-        },
-      });
-      let variables = {};
-      let actions: ActionDialogTab[] = [];
-      // @ts-ignore
-      const type = await contract.read.getType();
+    try {
+      const discountStrategies =
+        await shopContract.read.getDiscountStrategies();
+      console.log({ discountStrategies });
+      const formattedStrategies = [];
+      for (const strategyAddress of discountStrategies) {
+        // @ts-ignore
+        const contract = getContract({
+          address: strategyAddress,
+          abi: contracts.IDiscountStrategy.abi,
+          client: {
+            public: publicClient,
+          },
+        });
+        let variables = {};
+        let actions: ActionDialogTab[] = [];
+        // @ts-ignore
+        const type = await contract.read.getType();
 
-      // @ts-ignore
-      switch (type) {
-        case DiscountStrategyType.MIN_ERC20_DISCOUNT: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: strategyAddress,
-            abi: contracts[DiscountStrategyType.MIN_ERC20_DISCOUNT].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const tokenAddress = await strategyContract.read.shopToken();
-          // @ts-ignore
-          const tokenContract = getContract({
-            address: tokenAddress,
-            abi: contracts.IERC20.abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const symbol = await tokenContract.read.symbol();
-          // @ts-ignore
-          const decimals = await tokenContract.read.decimals();
-          variables = {
-            ["Token"]: symbol,
-            ["Token Address"]: tokenAddress,
-            ["Min. Balance For Discount"]: `${formatUnits(
-              // @ts-ignore
-              await strategyContract.read.minBalance(),
-              decimals,
-            )} ${symbol}`,
+        // @ts-ignore
+        switch (type) {
+          case DiscountStrategyType.MIN_ERC20_DISCOUNT: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: strategyAddress,
+              abi: contracts[DiscountStrategyType.MIN_ERC20_DISCOUNT].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const tokenAddress = await strategyContract.read.shopToken();
+            // @ts-ignore
+            const tokenContract = getContract({
+              address: tokenAddress,
+              abi: contracts.IERC20.abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const symbol = await tokenContract.read.symbol();
+            // @ts-ignore
+            const decimals = await tokenContract.read.decimals();
+            variables = {
+              ["Token"]: symbol,
+              ["Token Address"]: tokenAddress,
+              ["Min. Balance For Discount"]: `${formatUnits(
+                // @ts-ignore
+                await strategyContract.read.minBalance(),
+                decimals,
+              )} ${symbol}`,
 
-            ["Percentage Discount"]: `${
-              // @ts-ignore
-              Number(await strategyContract.read.bps()) / 100
-            }%`,
-          };
-          actions = [
-            getUpdatePercentageAction({
-              // @ts-ignore
-              initialBps: await strategyContract.read.bps(),
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-            getUpdateMinBalanceERC20Action({
-              symbol,
-              decimals,
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-          ];
-          break;
-        }
-        case DiscountStrategyType.MIN_ERC721_DISCOUNT: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: strategyAddress,
-            abi: contracts[DiscountStrategyType.MIN_ERC721_DISCOUNT].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const tokenAddress = await strategyContract.read.shopToken();
-          variables = {
-            ["ERC721 Address"]: tokenAddress,
+              ["Percentage Discount"]: `${
+                // @ts-ignore
+                Number(await strategyContract.read.bps()) / 100
+              }%`,
+            };
+            actions = [
+              getUpdatePercentageAction({
+                // @ts-ignore
+                initialBps: await strategyContract.read.bps(),
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+              getUpdateMinBalanceERC20Action({
+                symbol,
+                decimals,
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+            ];
+            break;
+          }
+          case DiscountStrategyType.MIN_ERC721_DISCOUNT: {
             // @ts-ignore
-            ["Min. Balance For Discount"]: `${await strategyContract.read.minBalance()}`,
-            ["Percentage Discount"]: `${
-              // @ts-ignore
-              Number(await strategyContract.read.bps()) / 100
-            }%`,
-          };
-          actions = [
-            getUpdatePercentageAction({
-              // @ts-ignore
-              initialBps: await strategyContract.read.bps(),
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-            getUpdateMinBalanceAction({
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-            getUpdateShopTokenAction({
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-          ];
-          break;
-        }
-        case DiscountStrategyType.ALLOWLIST_DISCOUNT: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: strategyAddress,
-            abi: contracts[DiscountStrategyType.ALLOWLIST_DISCOUNT].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          variables = {
+            const strategyContract = getContract({
+              address: strategyAddress,
+              abi: contracts[DiscountStrategyType.MIN_ERC721_DISCOUNT].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
             // @ts-ignore
-            ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
-          };
-          actions = [
-            getUpdateAllowlistBpsAction({
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-          ];
-          break;
+            const tokenAddress = await strategyContract.read.shopToken();
+            variables = {
+              ["ERC721 Address"]: tokenAddress,
+              // @ts-ignore
+              ["Min. Balance For Discount"]: `${await strategyContract.read.minBalance()}`,
+              ["Percentage Discount"]: `${
+                // @ts-ignore
+                Number(await strategyContract.read.bps()) / 100
+              }%`,
+            };
+            actions = [
+              getUpdatePercentageAction({
+                // @ts-ignore
+                initialBps: await strategyContract.read.bps(),
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+              getUpdateMinBalanceAction({
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+              getUpdateShopTokenAction({
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+            ];
+            break;
+          }
+          case DiscountStrategyType.ALLOWLIST_DISCOUNT: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: strategyAddress,
+              abi: contracts[DiscountStrategyType.ALLOWLIST_DISCOUNT].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            variables = {
+              // @ts-ignore
+              ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
+            };
+            actions = [
+              getUpdateAllowlistBpsAction({
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+            ];
+            break;
+          }
+          case DiscountStrategyType.EAS_ATTESTATION_DISCOUNT: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: strategyAddress,
+              abi: contracts[DiscountStrategyType.EAS_ATTESTATION_DISCOUNT].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const initialIndexerAddress = await strategyContract.read.indexer();
+            // @ts-ignore
+            const initialSchemaUid = await strategyContract.read.schemaUid([]);
+            // @ts-ignore
+            const initialBps = await strategyContract.read.bps();
+            variables = {
+              ["Percentage Discount"]: `${Number(initialBps) / 100}%`,
+              ["Schema ID"]: initialSchemaUid,
+              ["Indexer Address"]: initialIndexerAddress,
+            };
+            actions = [
+              getUpdatePercentageAction({
+                initialBps,
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+              getUpdateEASSchemaAction({
+                initialIndexerAddress,
+                initialSchemaUid,
+                strategyContract,
+                refresh: getDiscountStrategies,
+              }),
+            ];
+            break;
+          }
+          default:
+            break;
         }
-        case DiscountStrategyType.EAS_ATTESTATION_DISCOUNT: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: strategyAddress,
-            abi: contracts[DiscountStrategyType.EAS_ATTESTATION_DISCOUNT].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const initialIndexerAddress = await strategyContract.read.indexer();
-          // @ts-ignore
-          const initialSchemaUid = await strategyContract.read.schemaUid([]);
-          // @ts-ignore
-          const initialBps = await strategyContract.read.bps();
-          variables = {
-            ["Percentage Discount"]: `${Number(initialBps) / 100}%`,
-            ["Schema ID"]: initialSchemaUid,
-            ["Indexer Address"]: initialIndexerAddress,
-          };
-          actions = [
-            getUpdatePercentageAction({
-              initialBps,
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-            getUpdateEASSchemaAction({
-              initialIndexerAddress,
-              initialSchemaUid,
-              strategyContract,
-              refresh: getDiscountStrategies,
-            }),
-          ];
-          break;
-        }
-        default:
-          break;
+
+        formattedStrategies.push({
+          type,
+          contractAddress: strategyAddress,
+          variables,
+          actions,
+        });
       }
-
-      formattedStrategies.push({
-        type,
-        contractAddress: strategyAddress,
-        variables,
-        actions,
+      setStrategies(formattedStrategies);
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: "Error fetching discount strategies",
+        description:
+          error.message ||
+          "An error occurred while fetching discount strategies.",
+        variant: "destructive",
       });
     }
-    setStrategies(formattedStrategies);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -272,14 +286,22 @@ export function DiscountStrategies() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!strategies.length && (
+            {loading && (
+              <TableRow className="hover:bg-background">
+                <TableCell colSpan={4} className="pt-6 text-center">
+                  Loading discount strategies...
+                </TableCell>
+              </TableRow>
+            )}
+            {!loading && !strategies.length && (
               <TableRow className="hover:bg-background">
                 <TableCell colSpan={4} className="pt-6 text-center">
                   No discount strategies found.
                 </TableCell>
               </TableRow>
             )}
-            {strategies &&
+            {!loading &&
+              strategies &&
               strategies.map((strategy) => (
                 <TableRow key={strategy.contractAddress}>
                   <TableCell className="font-semibold">

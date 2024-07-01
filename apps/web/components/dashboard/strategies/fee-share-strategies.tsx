@@ -57,147 +57,164 @@ export function FeeShareStrategies() {
   const { shopContract } = useSelectShop();
   const { publicClient, walletClient } = useContracts();
   const [feeShareStrategies, setFeeShareStrategies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const getFeeShareStrategies = async () => {
-    const feeShareStrategies = await shopContract.read.getFeeShareStrategies();
-    console.log({ feeShareStrategies });
-    const feeShareStrategiesWithActions = [];
-    for (const feeShareStrategyAddress of feeShareStrategies) {
-      // @ts-ignore
-      const contract = getContract({
-        address: feeShareStrategyAddress,
-        abi: contracts.IRewardStrategy.abi,
-        client: {
-          public: publicClient,
-        },
-      });
-      let variables = {};
-      let actions: ActionDialogTab[] = [];
-      // @ts-ignore
-      const type = await contract.read.getType();
+    setLoading(true);
+    try {
+      const feeShareStrategies =
+        await shopContract.read.getFeeShareStrategies();
+      console.log({ feeShareStrategies });
+      const feeShareStrategiesWithActions = [];
+      for (const feeShareStrategyAddress of feeShareStrategies) {
+        // @ts-ignore
+        const contract = getContract({
+          address: feeShareStrategyAddress,
+          abi: contracts.IRewardStrategy.abi,
+          client: {
+            public: publicClient,
+          },
+        });
+        let variables = {};
+        let actions: ActionDialogTab[] = [];
+        // @ts-ignore
+        const type = await contract.read.getType();
 
-      // @ts-ignore
-      switch (type) {
-        case FeeShareStrategyType.PERCENTAGE_FEE_SHARE: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: feeShareStrategyAddress,
-            abi: contracts[FeeShareStrategyType.PERCENTAGE_FEE_SHARE].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          variables = {
-            ["Fee Share Percentage"]: `${
-              // @ts-ignore
-              Number(await strategyContract.read.bps()) / 100
-            }%`,
-          };
-          actions = [
-            getUpdatePercentageAction({
-              // @ts-ignore
-              initialBps: await strategyContract.read.bps(),
-              strategyContract,
-              refresh: getFeeShareStrategies,
-            }),
-          ];
-          break;
-        }
-        case FeeShareStrategyType.TIMEFRAME_PERCENTAGE_FEE_SHARE: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: feeShareStrategyAddress,
-            abi: contracts[FeeShareStrategyType.TIMEFRAME_PERCENTAGE_FEE_SHARE]
-              .abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          variables = {
-            ["Fee Share Percentage"]: `${
-              // @ts-ignore
-              Number(await strategyContract.read.bps()) / 100
-            }%`,
-            ["Start Time"]: new Date(
-              // @ts-ignore
-              Number(await strategyContract.read.startTimestamp()) * 1000,
-            ).toLocaleString(undefined, {
-              timeZoneName: "short",
-            }),
-            ["End Time"]: new Date(
-              // @ts-ignore
-              Number(await strategyContract.read.endTimestamp()) * 1000,
-            ).toLocaleString(undefined, {
-              timeZoneName: "short",
-            }),
-          };
-          actions = [
-            getUpdatePercentageAction({
-              // @ts-ignore
-              initialBps: await strategyContract.read.bps(),
-              strategyContract,
-              refresh: getFeeShareStrategies,
-            }),
-            getUpdateTimeframeAction({
-              initialStartTimestamp:
-                // @ts-ignore
-                await strategyContract.read.startTimestamp(),
-              // @ts-ignore
-              initialEndTimestamp: await strategyContract.read.endTimestamp(),
-              strategyContract,
-              refresh: getFeeShareStrategies,
-            }),
-          ];
-          break;
-        }
-        case FeeShareStrategyType.ALLOWLIST_PERCENTAGE_FEE_SHARE: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: feeShareStrategyAddress,
-            abi: contracts[FeeShareStrategyType.ALLOWLIST_PERCENTAGE_FEE_SHARE]
-              .abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          variables = {
-            ["Fee Share Percentage"]: `${
-              // @ts-ignore
-              Number(await strategyContract.read.bps()) / 100
-            }%`,
+        // @ts-ignore
+        switch (type) {
+          case FeeShareStrategyType.PERCENTAGE_FEE_SHARE: {
             // @ts-ignore
-            ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
-          };
-          actions = [
-            getUpdatePercentageAction({
+            const strategyContract = getContract({
+              address: feeShareStrategyAddress,
+              abi: contracts[FeeShareStrategyType.PERCENTAGE_FEE_SHARE].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            variables = {
+              ["Fee Share Percentage"]: `${
+                // @ts-ignore
+                Number(await strategyContract.read.bps()) / 100
+              }%`,
+            };
+            actions = [
+              getUpdatePercentageAction({
+                // @ts-ignore
+                initialBps: await strategyContract.read.bps(),
+                strategyContract,
+                refresh: getFeeShareStrategies,
+              }),
+            ];
+            break;
+          }
+          case FeeShareStrategyType.TIMEFRAME_PERCENTAGE_FEE_SHARE: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: feeShareStrategyAddress,
+              abi: contracts[
+                FeeShareStrategyType.TIMEFRAME_PERCENTAGE_FEE_SHARE
+              ].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            variables = {
+              ["Fee Share Percentage"]: `${
+                // @ts-ignore
+                Number(await strategyContract.read.bps()) / 100
+              }%`,
+              ["Start Time"]: new Date(
+                // @ts-ignore
+                Number(await strategyContract.read.startTimestamp()) * 1000,
+              ).toLocaleString(undefined, {
+                timeZoneName: "short",
+              }),
+              ["End Time"]: new Date(
+                // @ts-ignore
+                Number(await strategyContract.read.endTimestamp()) * 1000,
+              ).toLocaleString(undefined, {
+                timeZoneName: "short",
+              }),
+            };
+            actions = [
+              getUpdatePercentageAction({
+                // @ts-ignore
+                initialBps: await strategyContract.read.bps(),
+                strategyContract,
+                refresh: getFeeShareStrategies,
+              }),
+              getUpdateTimeframeAction({
+                initialStartTimestamp:
+                  // @ts-ignore
+                  await strategyContract.read.startTimestamp(),
+                // @ts-ignore
+                initialEndTimestamp: await strategyContract.read.endTimestamp(),
+                strategyContract,
+                refresh: getFeeShareStrategies,
+              }),
+            ];
+            break;
+          }
+          case FeeShareStrategyType.ALLOWLIST_PERCENTAGE_FEE_SHARE: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: feeShareStrategyAddress,
+              abi: contracts[
+                FeeShareStrategyType.ALLOWLIST_PERCENTAGE_FEE_SHARE
+              ].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            variables = {
+              ["Fee Share Percentage"]: `${
+                // @ts-ignore
+                Number(await strategyContract.read.bps()) / 100
+              }%`,
               // @ts-ignore
-              initialBps: await strategyContract.read.bps(),
-              strategyContract,
-              refresh: getFeeShareStrategies,
-            }),
-            getUpdateAllowlistAction({
-              strategyContract,
-              refresh: getFeeShareStrategies,
-            }),
-          ];
-          break;
+              ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
+            };
+            actions = [
+              getUpdatePercentageAction({
+                // @ts-ignore
+                initialBps: await strategyContract.read.bps(),
+                strategyContract,
+                refresh: getFeeShareStrategies,
+              }),
+              getUpdateAllowlistAction({
+                strategyContract,
+                refresh: getFeeShareStrategies,
+              }),
+            ];
+            break;
+          }
+
+          default:
+            break;
         }
 
-        default:
-          break;
+        feeShareStrategiesWithActions.push({
+          type,
+          contractAddress: feeShareStrategyAddress,
+          variables,
+          actions,
+        });
       }
-
-      feeShareStrategiesWithActions.push({
-        type,
-        contractAddress: feeShareStrategyAddress,
-        variables,
-        actions,
+      setFeeShareStrategies(feeShareStrategiesWithActions);
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: "Error fetching fee share strategies",
+        description:
+          error.message ||
+          "An error occurred while fetching fee share strategies.",
+        variant: "destructive",
       });
     }
-    setFeeShareStrategies(feeShareStrategiesWithActions);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -227,14 +244,22 @@ export function FeeShareStrategies() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!feeShareStrategies.length && (
+            {loading && (
               <TableRow className="hover:bg-background">
                 <TableCell colSpan={4} className="pt-6 text-center">
-                  No discount strategies found.
+                  Loading referral / fee share strategies...
                 </TableCell>
               </TableRow>
             )}
-            {feeShareStrategies &&
+            {!loading && !feeShareStrategies.length && (
+              <TableRow className="hover:bg-background">
+                <TableCell colSpan={4} className="pt-6 text-center">
+                  No referral / fee share strategies found.
+                </TableCell>
+              </TableRow>
+            )}
+            {!loading &&
+              feeShareStrategies &&
               feeShareStrategies.map((strategy) => (
                 <TableRow key={strategy.contractAddress}>
                   <TableCell className="font-semibold">

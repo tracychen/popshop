@@ -57,299 +57,314 @@ export function RewardStrategies() {
   const { shopContract } = useSelectShop();
   const { publicClient, walletClient } = useContracts();
   const [rewardStrategies, setRewardStrategies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getRewardStrategies = async () => {
-    const rewardStrategies = await shopContract.read.getRewardStrategies();
-    console.log({ rewardStrategies });
-    const rewardStrategiesWithActions = [];
-    for (const rewardStrategyAddress of rewardStrategies) {
-      // @ts-ignore
-      const contract = getContract({
-        address: rewardStrategyAddress,
-        abi: contracts.IRewardStrategy.abi,
-        client: {
-          public: publicClient,
-        },
-      });
-      let variables = {};
-      let actions: ActionDialogTab[] = [];
-      // @ts-ignore
-      const type = await contract.read.getType();
+    setLoading(true);
+    try {
+      const rewardStrategies = await shopContract.read.getRewardStrategies();
+      console.log({ rewardStrategies });
+      const rewardStrategiesWithActions = [];
+      for (const rewardStrategyAddress of rewardStrategies) {
+        // @ts-ignore
+        const contract = getContract({
+          address: rewardStrategyAddress,
+          abi: contracts.IRewardStrategy.abi,
+          client: {
+            public: publicClient,
+          },
+        });
+        let variables = {};
+        let actions: ActionDialogTab[] = [];
+        // @ts-ignore
+        const type = await contract.read.getType();
 
-      // @ts-ignore
-      switch (type) {
-        case RewardStrategyType.FIXED_ERC20_REWARD: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: rewardStrategyAddress,
-            abi: contracts[RewardStrategyType.FIXED_ERC20_REWARD].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const tokenAddress = await strategyContract.read.shopToken();
-          // @ts-ignore
-          const tokenContract = getContract({
-            address: tokenAddress,
-            abi: contracts.IERC20.abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const symbol = await tokenContract.read.symbol();
-          // @ts-ignore
-          const decimals = await tokenContract.read.decimals();
-          variables = {
-            ["Token"]: symbol,
-            ["Token Address"]: tokenAddress,
-            ["Reward Per Purchase"]: `${formatUnits(
-              // @ts-ignore
-              await strategyContract.read.numTokens(),
-              decimals,
-            )} ${symbol}`,
-            ["Remaining Reward Supply"]: `${formatUnits(
-              // @ts-ignore
-              await tokenContract.read.balanceOf([rewardStrategyAddress]),
-              decimals,
-            )} ${symbol}`,
-          };
-          actions = [
-            getUpdateNumTokensAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              strategyContract,
-              refresh: getRewardStrategies,
-            }),
-            getFundRewardBalanceAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-            getWithdrawAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-          ];
-          break;
-        }
-        case RewardStrategyType.LINEAR_ERC20_REWARD: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: rewardStrategyAddress,
-            abi: contracts[RewardStrategyType.LINEAR_ERC20_REWARD].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const tokenAddress = await strategyContract.read.shopToken();
-          // @ts-ignore
-          const tokenContract = getContract({
-            address: tokenAddress,
-            abi: contracts.IERC20.abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const symbol = await tokenContract.read.symbol();
-          // @ts-ignore
-          const decimals = await tokenContract.read.decimals();
-          variables = {
-            ["Token"]: symbol,
-            ["Token Address"]: tokenAddress,
+        // @ts-ignore
+        switch (type) {
+          case RewardStrategyType.FIXED_ERC20_REWARD: {
             // @ts-ignore
-            ["Purchase Price Multiplier"]: `${await strategyContract.read.multiplier()}`,
-            ["Remaining Reward Supply"]: `${formatUnits(
-              // @ts-ignore
-              await tokenContract.read.balanceOf([rewardStrategyAddress]),
-              decimals,
-            )} ${symbol}`,
-          };
-          actions = [
-            getUpdateMultiplierAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              strategyContract,
-              refresh: getRewardStrategies,
-            }),
-            getFundRewardBalanceAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-            getWithdrawAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-          ];
-          break;
-        }
-        case RewardStrategyType.BONDING_CURVE_ERC20_REWARD: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: rewardStrategyAddress,
-            abi: contracts[RewardStrategyType.BONDING_CURVE_ERC20_REWARD].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const tokenAddress = await strategyContract.read.shopToken();
-          // @ts-ignore
-          const tokenContract = getContract({
-            address: tokenAddress,
-            abi: contracts.IERC20.abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const symbol = await tokenContract.read.symbol();
-          // @ts-ignore
-          const decimals = await tokenContract.read.decimals();
-          variables = {
-            ["Token"]: symbol,
-            ["Token Address"]: tokenAddress,
+            const strategyContract = getContract({
+              address: rewardStrategyAddress,
+              abi: contracts[RewardStrategyType.FIXED_ERC20_REWARD].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
             // @ts-ignore
-            ["Decay Constant"]: `${await strategyContract.read.decayConstant()}`,
+            const tokenAddress = await strategyContract.read.shopToken();
             // @ts-ignore
-            ["Base Reward Multiplier"]: `${await strategyContract.read.baseReward()}`,
-            ["Remaining Reward Supply"]: `${formatUnits(
-              // @ts-ignore
-              await tokenContract.read.balanceOf([rewardStrategyAddress]),
-              decimals,
-            )} ${symbol}`,
-          };
-          actions = [
-            getUpdateBondingCurveAction({
-              strategyContract,
-              // @ts-ignore
-              initialBaseReward: await strategyContract.read.baseReward(),
-              // @ts-ignore
-              initialDecayConstant: await strategyContract.read.decayConstant(),
-              refresh: getRewardStrategies,
-            }),
-            getFundRewardBalanceAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-            getWithdrawAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-          ];
-          break;
-        }
-        case RewardStrategyType.ALLOWLIST_FIXED_ERC20_REWARD: {
-          // @ts-ignore
-          const strategyContract = getContract({
-            address: rewardStrategyAddress,
-            abi: contracts[RewardStrategyType.ALLOWLIST_FIXED_ERC20_REWARD].abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const tokenAddress = await strategyContract.read.shopToken();
-          // @ts-ignore
-          const tokenContract = getContract({
-            address: tokenAddress,
-            abi: contracts.IERC20.abi,
-            client: {
-              public: publicClient,
-              wallet: walletClient,
-            },
-          });
-          // @ts-ignore
-          const symbol = await tokenContract.read.symbol();
-          // @ts-ignore
-          const decimals = await tokenContract.read.decimals();
-          variables = {
-            ["Token"]: symbol,
-            ["Token Address"]: tokenAddress,
-            ["Reward Per Purchase"]: `${formatUnits(
-              // @ts-ignore
-              await strategyContract.read.numTokens(),
-              decimals,
-            )} ${symbol}`,
+            const tokenContract = getContract({
+              address: tokenAddress,
+              abi: contracts.IERC20.abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
             // @ts-ignore
-            ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
-            ["Remaining Reward Supply"]: `${formatUnits(
+            const symbol = await tokenContract.read.symbol();
+            // @ts-ignore
+            const decimals = await tokenContract.read.decimals();
+            variables = {
+              ["Token"]: symbol,
+              ["Token Address"]: tokenAddress,
+              ["Reward Per Purchase"]: `${formatUnits(
+                // @ts-ignore
+                await strategyContract.read.numTokens(),
+                decimals,
+              )} ${symbol}`,
+              ["Remaining Reward Supply"]: `${formatUnits(
+                // @ts-ignore
+                await tokenContract.read.balanceOf([rewardStrategyAddress]),
+                decimals,
+              )} ${symbol}`,
+            };
+            actions = [
+              getUpdateNumTokensAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                strategyContract,
+                refresh: getRewardStrategies,
+              }),
+              getFundRewardBalanceAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+              getWithdrawAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+            ];
+            break;
+          }
+          case RewardStrategyType.LINEAR_ERC20_REWARD: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: rewardStrategyAddress,
+              abi: contracts[RewardStrategyType.LINEAR_ERC20_REWARD].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const tokenAddress = await strategyContract.read.shopToken();
+            // @ts-ignore
+            const tokenContract = getContract({
+              address: tokenAddress,
+              abi: contracts.IERC20.abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const symbol = await tokenContract.read.symbol();
+            // @ts-ignore
+            const decimals = await tokenContract.read.decimals();
+            variables = {
+              ["Token"]: symbol,
+              ["Token Address"]: tokenAddress,
               // @ts-ignore
-              await tokenContract.read.balanceOf([rewardStrategyAddress]),
-              decimals,
-            )} ${symbol}`,
-          };
-          actions = [
-            getUpdateNumTokensAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              strategyContract,
-              refresh: getRewardStrategies,
-            }),
-            getFundRewardBalanceAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-            getWithdrawAction({
-              symbol: symbol as string,
-              decimals: decimals as number,
-              tokenContract,
-              strategyContract,
-              strategyAddress: rewardStrategyAddress,
-              refresh: getRewardStrategies,
-            }),
-            getUpdateAllowlistAction({
-              strategyContract,
-              refresh: getRewardStrategies,
-            }),
-          ];
-          break;
+              ["Purchase Price Multiplier"]: `${await strategyContract.read.multiplier()}`,
+              ["Remaining Reward Supply"]: `${formatUnits(
+                // @ts-ignore
+                await tokenContract.read.balanceOf([rewardStrategyAddress]),
+                decimals,
+              )} ${symbol}`,
+            };
+            actions = [
+              getUpdateMultiplierAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                strategyContract,
+                refresh: getRewardStrategies,
+              }),
+              getFundRewardBalanceAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+              getWithdrawAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+            ];
+            break;
+          }
+          case RewardStrategyType.BONDING_CURVE_ERC20_REWARD: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: rewardStrategyAddress,
+              abi: contracts[RewardStrategyType.BONDING_CURVE_ERC20_REWARD].abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const tokenAddress = await strategyContract.read.shopToken();
+            // @ts-ignore
+            const tokenContract = getContract({
+              address: tokenAddress,
+              abi: contracts.IERC20.abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const symbol = await tokenContract.read.symbol();
+            // @ts-ignore
+            const decimals = await tokenContract.read.decimals();
+            variables = {
+              ["Token"]: symbol,
+              ["Token Address"]: tokenAddress,
+              // @ts-ignore
+              ["Decay Constant"]: `${await strategyContract.read.decayConstant()}`,
+              // @ts-ignore
+              ["Base Reward Multiplier"]: `${await strategyContract.read.baseReward()}`,
+              ["Remaining Reward Supply"]: `${formatUnits(
+                // @ts-ignore
+                await tokenContract.read.balanceOf([rewardStrategyAddress]),
+                decimals,
+              )} ${symbol}`,
+            };
+            actions = [
+              getUpdateBondingCurveAction({
+                strategyContract,
+                // @ts-ignore
+                initialBaseReward: await strategyContract.read.baseReward(),
+
+                initialDecayConstant:
+                  // @ts-ignore
+                  await strategyContract.read.decayConstant(),
+                refresh: getRewardStrategies,
+              }),
+              getFundRewardBalanceAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+              getWithdrawAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+            ];
+            break;
+          }
+          case RewardStrategyType.ALLOWLIST_FIXED_ERC20_REWARD: {
+            // @ts-ignore
+            const strategyContract = getContract({
+              address: rewardStrategyAddress,
+              abi: contracts[RewardStrategyType.ALLOWLIST_FIXED_ERC20_REWARD]
+                .abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const tokenAddress = await strategyContract.read.shopToken();
+            // @ts-ignore
+            const tokenContract = getContract({
+              address: tokenAddress,
+              abi: contracts.IERC20.abi,
+              client: {
+                public: publicClient,
+                wallet: walletClient,
+              },
+            });
+            // @ts-ignore
+            const symbol = await tokenContract.read.symbol();
+            // @ts-ignore
+            const decimals = await tokenContract.read.decimals();
+            variables = {
+              ["Token"]: symbol,
+              ["Token Address"]: tokenAddress,
+              ["Reward Per Purchase"]: `${formatUnits(
+                // @ts-ignore
+                await strategyContract.read.numTokens(),
+                decimals,
+              )} ${symbol}`,
+              // @ts-ignore
+              ["Allowlist Size"]: `${await strategyContract.read.getAllowlistLength()}`,
+              ["Remaining Reward Supply"]: `${formatUnits(
+                // @ts-ignore
+                await tokenContract.read.balanceOf([rewardStrategyAddress]),
+                decimals,
+              )} ${symbol}`,
+            };
+            actions = [
+              getUpdateNumTokensAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                strategyContract,
+                refresh: getRewardStrategies,
+              }),
+              getFundRewardBalanceAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+              getWithdrawAction({
+                symbol: symbol as string,
+                decimals: decimals as number,
+                tokenContract,
+                strategyContract,
+                strategyAddress: rewardStrategyAddress,
+                refresh: getRewardStrategies,
+              }),
+              getUpdateAllowlistAction({
+                strategyContract,
+                refresh: getRewardStrategies,
+              }),
+            ];
+            break;
+          }
+          default:
+            break;
         }
-        default:
-          break;
+
+        rewardStrategiesWithActions.push({
+          type,
+          contractAddress: rewardStrategyAddress,
+          variables,
+          actions,
+        });
       }
-
-      rewardStrategiesWithActions.push({
-        type,
-        contractAddress: rewardStrategyAddress,
-        variables,
-        actions,
+      setRewardStrategies(rewardStrategiesWithActions);
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: error.message || "Error fetching reward strategies",
+        variant: "destructive",
       });
     }
-    setRewardStrategies(rewardStrategiesWithActions);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -378,14 +393,22 @@ export function RewardStrategies() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!rewardStrategies.length && (
+            {loading && (
               <TableRow className="hover:bg-background">
                 <TableCell colSpan={4} className="pt-6 text-center">
-                  No discount strategies found.
+                  Loading reward strategies...
                 </TableCell>
               </TableRow>
             )}
-            {rewardStrategies &&
+            {!loading && !rewardStrategies.length && (
+              <TableRow className="hover:bg-background">
+                <TableCell colSpan={4} className="pt-6 text-center">
+                  No reward strategies found.
+                </TableCell>
+              </TableRow>
+            )}
+            {!loading &&
+              rewardStrategies &&
               rewardStrategies.map((strategy) => (
                 <TableRow key={strategy.contractAddress}>
                   <TableCell className="font-semibold">
