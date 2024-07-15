@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
+import { FAQModal } from "../nav/faq-modal";
 import { LogInButton } from "../nav/login-button";
 
 export function ShopNav({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,9 @@ export function ShopNav({ children }: { children: React.ReactNode }) {
               Orders
             </Link>
           )}
+          <FAQModal>
+            <div className="hover:cursor-pointer">FAQ</div>
+          </FAQModal>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -73,6 +77,9 @@ export function ShopNav({ children }: { children: React.ReactNode }) {
                   Orders
                 </Link>
               )}
+              <FAQModal>
+                <div className="hover:cursor-pointer">FAQ</div>
+              </FAQModal>
             </nav>
           </SheetContent>
         </Sheet>
